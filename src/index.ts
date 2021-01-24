@@ -1,29 +1,34 @@
-import { loadImage, loadLevel, Tyle_JSON } from './loaders';
-import SpriteSheet from './SpriteSheet';
+import Compositor from './Compositor';
+import { createBackgroundLayer, createSpriteLayer } from './layers';
+import { loadLevel } from './loaders';
+import { loadMarioSprite, loadBackgroundSprites } from './sprites';
 
 const canvas = document.getElementById('screen') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
 
-function drawBackground(
-  background: Tyle_JSON,
-  context: CanvasRenderingContext2D,
-  sprites: SpriteSheet,
-) {
-  background.ranges.forEach(([x1, x2, y1, y2]) => {
-    for (let x = x1; x < x2; ++x) {
-      for (let y = y1; y < y2; ++y) {
-        sprites.drawTile(background.tile, context, x, y);
-      }
-    }
-  });
-}
+Promise.all([
+  loadMarioSprite(),
+  loadBackgroundSprites(),
+  loadLevel('1-1'),
+]).then(([marioSprite, backgroundsprites, level]) => {
+  const comp = new Compositor();
+  const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundsprites);
+  comp.layers.push(backgroundLayer);
 
-loadImage('./img/tiles.png').then((image) => {
-  const sprites = new SpriteSheet(image, 16, 16);
-  sprites.define('ground', 0, 0);
-  sprites.define('sky', 3, 23);
+  const pos = {
+    x: 64,
+    y: 64,
+  };
 
-  loadLevel('1-1').then((level) => {
-    level.backgrounds.forEach(background => drawBackground(background, ctx, sprites));
-  });
+  const spriteLayer = createSpriteLayer(marioSprite, pos);
+  comp.layers.push(spriteLayer);
+
+  function update() {
+    comp.draw(ctx);
+    pos.x += 2;
+    pos.y += 2;
+    requestAnimationFrame(update);
+  }
+
+  update();
 });

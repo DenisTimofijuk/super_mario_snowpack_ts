@@ -1,4 +1,6 @@
-export type SpriteSheetName = 'ground' | 'sky';
+type MarioSpritename = 'idle';
+type BackgroundSpriteName = 'ground' | 'sky';
+export type SpriteSheetName = BackgroundSpriteName | MarioSpritename;
 
 export default class SpriteSheet {
   image: HTMLImageElement;
@@ -12,25 +14,29 @@ export default class SpriteSheet {
     this.tiles = new Map();
   }
 
-  define(name: SpriteSheetName, x: number, y: number) {
+  define(name: SpriteSheetName, x:number, y:number, width: number, height: number) {
     const buffer = document.createElement('canvas');
-    buffer.width = this.width;
-    buffer.height = this.height;
+    buffer.width = width;
+    buffer.height = height;
     buffer
       .getContext('2d')!
       .drawImage(
         this.image,
-        x * this.width,
-        y * this.height,
-        this.width,
-        this.height,
+        x,
+        y,
+        width,
+        height,
         0,
         0,
-        this.width,
-        this.height,
+        width,
+        height,
       );
     this.tiles.set(name, buffer);
   }
+
+  defineTile(name: SpriteSheetName, x:number, y:number){
+    this.define(name, x * this.width, y * this.height, this.width, this.height);
+  }  
 
   draw(
     name: SpriteSheetName,
