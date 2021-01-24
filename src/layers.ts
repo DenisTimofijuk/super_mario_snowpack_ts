@@ -1,3 +1,4 @@
+import type Entity from "./Entity";
 import type { Tyle_JSON } from "./loaders";
 import type SpriteSheet from "./SpriteSheet";
 
@@ -15,11 +16,12 @@ export function createBackgroundLayer(backgrounds: Tyle_JSON[], sprites: SpriteS
   };
 }
 
-export function createSpriteLayer(sprite: SpriteSheet, pos: { x: number; y: number }) {
-  return function drawSpriteLayer(context: CanvasRenderingContext2D) {
-    sprite.draw('idle', context, pos.x, pos.y);
-  };
-}
+export function createSpriteLayer(entity: Entity) {
+    return function drawSpriteLayer(context: CanvasRenderingContext2D) {
+      entity.draw(context);
+    };
+  }
+  
 
 function drawBackground(
     background: Tyle_JSON,
