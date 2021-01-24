@@ -1,14 +1,13 @@
 import Entity from './Entity';
 import { loadMarioSprite } from './sprites';
+import { Jump } from './traits/Jump';
+import { Velocity } from './traits/Velocity';
 
 export function createMario() {
   return loadMarioSprite().then((sprite) => {
     const mario = new Entity();
-
-    mario.update = function updateMario(time:number) {
-      this.pos.x += this.vel.x * time;
-      this.pos.y += this.vel.y * time;
-    };
+    mario.addTrait(new Velocity());
+    mario.addTrait(new Jump());
 
     mario.draw = function (context: CanvasRenderingContext2D) {
       sprite.draw('idle', context, this.pos.x, this.pos.y);
