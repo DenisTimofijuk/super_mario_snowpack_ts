@@ -12,7 +12,12 @@ class ParentClass {
 
   addTrait(trait: TemplateClass) {
     this.usedTemplates.push(trait);
+
+    //-TS.ERROR-->>
+    // Type 'TemplateClass' is not assignable to type 'never'. 
+    // The intersection 'UsingTemplateJump & UsingTemplateRun' was reduced to 'never' because property 'UsingTemplate_variable_1' exists in multiple constituents and is private in some.ts(2322)
     this[trait.NAME] = trait;
+    //-TS.ERROR--<<
   }
 }
 
