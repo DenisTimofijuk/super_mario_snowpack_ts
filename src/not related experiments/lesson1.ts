@@ -35,6 +35,10 @@ class Trait {
   update(a: Entity, b: number) {
     console.warn("Unhandled update call in Trait");
   }
+
+  check(){
+    console.log("Check");
+  }
 }
 
 class Jump extends Trait{
