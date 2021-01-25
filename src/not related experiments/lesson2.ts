@@ -67,7 +67,12 @@ class UsingTemplateRun extends TemplateClass {
     this.UsingTemplate_variable_4 = 0;
   }
 
-  run() {
+  init() {
     console.log('run');
   }
 }
+
+// End goal:
+// const example = new ParentClass();
+// example.jump.start()
+// example.run.init()
