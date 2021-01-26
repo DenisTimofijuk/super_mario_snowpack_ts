@@ -9,7 +9,13 @@ class Office {
 
   addDepartment(department: Deppartment){
       this.departments.push(department);
-      this[department.name] = department;
+      
+      this[department.name] = department; //TS ERROR
+      
+      /**
+       * Type 'Deppartment' is not assignable to type 'ITdeppartment & ACCdeppartment'.
+       * Type 'Deppartment' is missing the following properties from type 'ITdeppartment': functionName, checkNetworkts(2322)
+       */
   }
 }
 
