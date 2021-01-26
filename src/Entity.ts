@@ -4,26 +4,23 @@ import type { Velocity } from './traits/Velocity';
 
 type TraitName = 'jump' | 'velocity';
 export class Trait {
-  // NAME: TraitName;
-  duration!: number;
-  velocity!: number;
-  engageTime!: number;
-  constructor(public readonly NAME: TraitName) {
-    // this.NAME = name;
-  }
+  duration!: number; //TS workaround
+  velocity!: number; //TS workaround
+  engageTime!: number; //TS workaround
+  constructor(public readonly NAME: TraitName) { }
 
   update(a: Entity, b: number) {
     console.warn('Unhandled update call in Trait');
   }
 
-  start() {}
+  start(){} //TS workaround
 
-  cancel() {}
+  cancel(){} //TS workaround
 }
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
-  traits: Trait[];
+  traits: Array<Jump | Velocity>;
   jump!: Jump;
   velocity!: Velocity;
   constructor() {
@@ -32,7 +29,7 @@ export default class Entity {
     this.traits = [];
   }
 
-  addTrait(trait: Trait) {
+  addTrait(trait: Jump | Velocity) {
     this.traits.push(trait);
     this[trait.NAME] = trait;
   }

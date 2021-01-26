@@ -18,11 +18,11 @@ export class Jump extends Trait{
       }
     }
 
-    start(){
+    start (){
         this.engageTime = this.duration;
     }
 
-    cancel(){
+    cancel (){
         this.engageTime = 0;
     }
   }
