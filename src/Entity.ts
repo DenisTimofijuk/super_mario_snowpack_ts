@@ -4,12 +4,12 @@ import type { Velocity } from './traits/Velocity';
 
 type TraitName = 'jump' | 'velocity';
 export class Trait {
-  NAME: TraitName;
+  // NAME: TraitName;
   duration!: number;
   velocity!: number;
   engageTime!: number;
-  constructor(name: TraitName) {
-    this.NAME = name;
+  constructor(public readonly NAME: TraitName) {
+    // this.NAME = name;
   }
 
   update(a: Entity, b: number) {

@@ -1,8 +1,8 @@
 export class Vec2 {
-    x!: number;
-    y!: number;
-    constructor(x:number, y:number) {
-      this.set(x, y);
+    // x!: number;
+    // y!: number;
+    constructor(public x:number, public y:number) {
+      // this.set(x, y);
     }
   
     set(x:number, y:number){

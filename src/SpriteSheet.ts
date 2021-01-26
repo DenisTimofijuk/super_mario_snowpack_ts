@@ -3,14 +3,14 @@ type BackgroundSpriteName = 'ground' | 'sky';
 export type SpriteSheetName = BackgroundSpriteName | MarioSpritename;
 
 export default class SpriteSheet {
-  image: HTMLImageElement;
-  width: number;
-  height: number;
+  // image: HTMLImageElement;
+  // width: number;
+  // height: number;
   tiles: Map<SpriteSheetName, HTMLCanvasElement>;
-  constructor(image: HTMLImageElement, width: number, height: number) {
-    this.image = image;
-    this.width = width;
-    this.height = height;
+  constructor(public image: HTMLImageElement, public width: number, public height: number) {
+    // this.image = image;
+    // this.width = width;
+    // this.height = height;
     this.tiles = new Map();
   }
 
