@@ -1,21 +1,17 @@
 export {}
+
+type Departments = ITdeppartment | ACCdeppartment;
 class Office {
-  departments: Deppartment[];
-  it?: ITdeppartment;
-  acc?: ACCdeppartment;
+  departments: Array<Departments>;
+  it!: ITdeppartment;
+  acc!: ACCdeppartment;
   constructor(){
       this.departments = [];
   }
 
-  addDepartment(department: Deppartment){
-      this.departments.push(department);
-      
-      this[department.name] = department; //TS ERROR
-      
-      /**
-       * Type 'Deppartment' is not assignable to type 'ITdeppartment & ACCdeppartment'.
-       * Type 'Deppartment' is missing the following properties from type 'ITdeppartment': functionName, checkNetworkts(2322)
-       */
+  addDepartment(Department: Departments){
+      this.departments.push(Department);
+      this[Department.name] = Department as ITdeppartment & ACCdeppartment; //TS workaround
   }
 }
 
@@ -60,9 +56,10 @@ constructor() {
   }
 }
 
+
 const downTown = new Office()
-downTown.addDepartment(new ITdeppartment());
-downTown.addDepartment(new ACCdeppartment());
+downTown.addDepartment( new ITdeppartment() );
+downTown.addDepartment( new ACCdeppartment() );
 
 downTown.it && downTown.it.addTask("New IT Task");
 downTown.it && downTown.it.checkNetwork("Office network");
