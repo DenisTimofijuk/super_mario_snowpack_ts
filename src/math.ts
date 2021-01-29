@@ -1,6 +1,6 @@
 import type { SpriteSheetName } from "./SpriteSheet";
 
-type GridElement = {
+export type GridElement = {
   name:SpriteSheetName;
 
 }
