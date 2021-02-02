@@ -1,10 +1,11 @@
+import type Camera from './Camera';
 import type Entity from './Entity';
 import type Level from './level';
 import type SpriteSheet from './SpriteSheet';
 
 export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
   const buffer = document.createElement('canvas');
-  buffer.width = 256;
+  buffer.width = 2048//256;
   buffer.height = 240;
   const context = buffer.getContext('2d')!;
 
@@ -12,14 +13,23 @@ export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
     sprites.drawTile(tile.name, context, x, y);
   });
 
-  return function drawBackgroundLayer(context: CanvasRenderingContext2D) {
-    context.drawImage(buffer, 0, 0);
+  return function drawBackgroundLayer(context: CanvasRenderingContext2D, camera:Camera) {
+    context.drawImage(buffer, -camera.pos.x, -camera.pos.y);
   };
 }
 
-export function createSpriteLayer(entities: Set<Entity>) {
-  return function drawSpriteLayer(context: CanvasRenderingContext2D) {
-    entities.forEach((entity) => entity.draw(context));
+export function createSpriteLayer(entities: Set<Entity>, width = 64, height = 64) {
+  const spriteBuffer = document.createElement('canvas');
+  spriteBuffer.width = width;
+  spriteBuffer.height = height;
+  const spriteBufferContext = spriteBuffer.getContext('2d')!;
+
+  return function drawSpriteLayer(context: CanvasRenderingContext2D, camera:Camera) {
+    entities.forEach((entity) => {
+      spriteBufferContext.clearRect(0,0, spriteBuffer.width, spriteBuffer.height);
+      entity.draw(spriteBufferContext)
+      context.drawImage(spriteBuffer, entity.pos.x - camera.pos.x, entity.pos.y - camera.pos.y);
+    });
   };
 }
 
@@ -35,18 +45,27 @@ export function createCollisionLayer(level:Level) {
     return getByIndexOriginal.call(tileResolver, x, y);
   }
 
-  return function drawCollision(context:CanvasRenderingContext2D) {
+  return function drawCollision(context:CanvasRenderingContext2D, camera:Camera) {
     context.strokeStyle = "blue";
     resolvedTiles.forEach(({x, y}) => {
       context.beginPath();
-      context.rect(x * tileSize, y*tileSize, tileSize, tileSize);
+      context.rect(
+        x * tileSize - camera.pos.x,
+        y * tileSize - camera.pos.y,
+        tileSize,
+        tileSize);
       context.stroke();
     })
 
     context.strokeStyle = "red";
     level.entities.forEach(entity => {
       context.beginPath();
-      context.rect(entity.pos.x, entity.pos.y, entity.size.x, entity.size.y);
+      context.rect(
+        entity.pos.x - camera.pos.x,
+        entity.pos.y - camera.pos.y,
+        entity.size.x,
+        entity.size.y
+        );
       context.stroke();
     })
 
