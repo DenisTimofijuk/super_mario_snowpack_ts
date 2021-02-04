@@ -1,7 +1,8 @@
 export {}
 
 type Departments = ITdeppartment | ACCdeppartment;
-class Office {
+
+class Office{
   departments: Array<Departments>;
   it!: ITdeppartment;
   acc!: ACCdeppartment;
@@ -9,14 +10,15 @@ class Office {
       this.departments = [];
   }
 
-  addDepartment(Department: Departments){
+  addDepartment<T extends Departments>(Department: T){
       this.departments.push(Department);
-      this[Department.name] = Department as ITdeppartment & ACCdeppartment; //TS workaround
+      this[Department.name] = Department //as ITdeppartment & ACCdeppartment; //TS workaround <T extends keyof Office>
   }
 }
 
+type DepartmentName = 'it' | 'acc';
 class Deppartment{
-  name: 'it' | 'acc';
+  name: DepartmentName;
   tasks: any[];
   constructor(name: 'it' | 'acc'){
       this.name = name;
@@ -58,11 +60,16 @@ constructor() {
 
 
 const downTown = new Office()
-downTown.addDepartment( new ITdeppartment() );
-downTown.addDepartment( new ACCdeppartment() );
+downTown.addDepartment<ITdeppartment>( new ITdeppartment() );
+downTown.addDepartment<ACCdeppartment>( new ACCdeppartment() );
 
 downTown.it && downTown.it.addTask("New IT Task");
 downTown.it && downTown.it.checkNetwork("Office network");
 
 downTown.acc && downTown.acc.addTask("New ACC task");
 downTown.acc && downTown.acc.addAccount("Testing new account");
+
+function Logger(constructor: Function){
+  console.log('Logging...');
+  console.log(constructor);
+}

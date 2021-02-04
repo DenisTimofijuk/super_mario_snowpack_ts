@@ -1,9 +1,4 @@
-import type { SpriteSheetName } from "./SpriteSheet";
 
-export type GridElement = {
-  name:SpriteSheetName;
-
-}
 export class Matrix {
   grid: GridElement[][];
   constructor() {

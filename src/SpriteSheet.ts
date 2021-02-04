@@ -1,7 +1,3 @@
-type MarioSpritename = 'idle';
-export type BackgroundSpriteName = 'ground' | 'sky' | 'chocolate' | 'bricks' | 'chance';
-export type SpriteSheetName = BackgroundSpriteName | MarioSpritename;
-
 export default class SpriteSheet {
   tiles: Map<SpriteSheetName, HTMLCanvasElement>;
   constructor(public image: HTMLImageElement, public width: number, public height: number) {

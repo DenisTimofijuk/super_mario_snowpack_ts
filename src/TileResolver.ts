@@ -1,13 +1,4 @@
-import type { GridElement, Matrix } from "./math";
-
-type GetByIndexResult = {
-    tile: GridElement;
-    y1: number;
-    y2: number;
-    x1: number;
-    x2: number;
-}
-
+import type { Matrix } from "./math";
 export default class TileResolver {
     constructor(private matrix:Matrix, public tileSize = 16) {
         

@@ -1,6 +1,5 @@
 import { createBackgroundLayer, createSpriteLayer } from './layers';
 import Level from './level';
-import type { BackgroundSpriteName, SpriteSheetName } from './SpriteSheet';
 import SpriteSheet from './SpriteSheet';
 
 export function loadImage(url: string): Promise<HTMLImageElement> {
@@ -14,15 +13,15 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
 }
 
 export function loadLevel(name: LevelName) {
-  return Promise.all([
-    loadJSON(`./levels/${name}.json`),
-    loadSpriteSheet('overworld')
-  ]).then(([levelSpec, backgroundsprites]) => {
+  return loadJSON<Level_JSON>(`./levels/${name}.json`)
+  .then(levelSpec=> Promise.all([
+    levelSpec,
+    loadSpriteSheet(levelSpec.spriteSheet)
+  ]))
+  .then(([levelSpec, backgroundsprites]) => {
     const level = new Level();
 
-    if (levelSpec.type === 'level') {
-      createTiles(level, levelSpec.backgrounds);
-    }
+    createTiles(level, levelSpec.backgrounds);
 
     if(backgroundsprites){
       const backgroundLayer = createBackgroundLayer(level, backgroundsprites);
@@ -50,6 +49,7 @@ function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
       for (let y = yStart; y < yENd; ++y) {
         level.tiles.set(x, y, {
           name: background.tile,
+          type: background.type
         });
       }
     }
@@ -76,46 +76,8 @@ function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
   );
 }
 
-type SpriteName = 'overworld' | 'underworld';
-
-type Overworld_tyles = {
-  name: BackgroundSpriteName;
-  index: [number, number];
-};
-
-interface Worlds {
-  imageURL: string;
-  tileW: number;
-  tileH: number;
-  tiles: Overworld_tyles[];
-}
-interface Overworld_JSON extends Worlds {
-  type: 'overworld';
-}
-
-interface Underworld_JSON extends Worlds {
-  type: 'underworld';
-}
-
-export type Tyle_JSON = {
-  tile: SpriteSheetName;
-  ranges: [[number, number, number?, number?]];
-};
-
-type Level_JSON = {
-  type: 'level';
-  backgrounds: Tyle_JSON[];
-};
-
-type LevelName = '1-1';
-
-type FetchedJSON = Level_JSON | Overworld_JSON | Underworld_JSON;
-
 async function loadSpriteSheet(name: SpriteName) {
-  const sheetSpec = await loadJSON(`./sprites/${name}.json`);
-  if (sheetSpec.type !== 'overworld' && sheetSpec.type !== 'underworld') {
-    return;
-  }
+  const sheetSpec = await loadJSON<Overworld_JSON | Underworld_JSON>(`./sprites/${name}.json`);
   const image = await loadImage(sheetSpec.imageURL);
   const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH);
   sheetSpec.tiles.forEach(tileSpec => {
@@ -124,7 +86,7 @@ async function loadSpriteSheet(name: SpriteName) {
   return sprites;
 }
 
-async function loadJSON(url: string): Promise<FetchedJSON> {
+async function loadJSON<T extends JSON_object>(url: string): Promise<T> {
   const r = await fetch(url);
   return await r.json();
 }

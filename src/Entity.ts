@@ -3,7 +3,6 @@ import type { Go } from './traits/Go';
 import type { Jump } from './traits/Jump';
 import type { Velocity } from './traits/Velocity';
 
-type TraitName = 'jump' | 'velocity' | 'go';
 export class Trait {
   constructor(public readonly NAME: TraitName) { }
 
