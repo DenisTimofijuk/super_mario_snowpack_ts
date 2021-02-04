@@ -14,25 +14,24 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
 
 export function loadLevel(name: LevelName) {
   return loadJSON<Level_JSON>(`./levels/${name}.json`)
-  .then(levelSpec=> Promise.all([
-    levelSpec,
-    loadSpriteSheet(levelSpec.spriteSheet)
-  ]))
-  .then(([levelSpec, backgroundsprites]) => {
-    const level = new Level();
+    .then((levelSpec) =>
+      Promise.all([levelSpec, loadSpriteSheet(levelSpec.spriteSheet)]),
+    )
+    .then(([levelSpec, backgroundsprites]) => {
+      const level = new Level();
 
-    createTiles(level, levelSpec.backgrounds);
+      createTiles(level, levelSpec.backgrounds);
 
-    if(backgroundsprites){
-      const backgroundLayer = createBackgroundLayer(level, backgroundsprites);
-      level.comp.layers.push(backgroundLayer);
-    }   
-    
-    const spriteLayer = createSpriteLayer(level.entities);
-    level.comp.layers.push(spriteLayer);
+      if (backgroundsprites) {
+        const backgroundLayer = createBackgroundLayer(level, backgroundsprites);
+        level.comp.layers.push(backgroundLayer);
+      }
 
-    return level;
-  });
+      const spriteLayer = createSpriteLayer(level.entities);
+      level.comp.layers.push(spriteLayer);
+
+      return level;
+    });
 }
 
 function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
@@ -49,7 +48,7 @@ function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
       for (let y = yStart; y < yENd; ++y) {
         level.tiles.set(x, y, {
           name: background.tile,
-          type: background.type
+          type: background.type,
         });
       }
     }
@@ -76,13 +75,25 @@ function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
   );
 }
 
-async function loadSpriteSheet(name: SpriteName) {
-  const sheetSpec = await loadJSON<Overworld_JSON | Underworld_JSON>(`./sprites/${name}.json`);
+export async function loadSpriteSheet(name: Sprite_JSON_file_name) {
+  const sheetSpec = await loadJSON<Overworld_JSON | Underworld_JSON | Mario_JSON>(
+    `./sprites/${name}.json`,
+  );
   const image = await loadImage(sheetSpec.imageURL);
-  const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH);
-  sheetSpec.tiles.forEach(tileSpec => {
-    sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);  
-  });
+  let sprites:SpriteSheet;
+
+  if(sheetSpec.type === 'world'){
+    sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH);  
+    sheetSpec.tiles.forEach((tileSpec) => {
+      sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
+    });
+  }else{
+    sprites = new SpriteSheet(image, 0, 0);
+    sheetSpec.frames.forEach((frameSpec) => {
+      sprites.define(frameSpec.name, ...frameSpec.rect)
+    });
+  }
+  
   return sprites;
 }
 
