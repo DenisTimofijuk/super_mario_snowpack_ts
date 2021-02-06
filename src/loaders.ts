@@ -1,3 +1,4 @@
+import { createAnim } from './anim';
 import { createBackgroundLayer, createSpriteLayer } from './layers';
 import Level from './level';
 import SpriteSheet from './SpriteSheet';
@@ -80,17 +81,26 @@ export async function loadSpriteSheet(name: Sprite_JSON_file_name) {
     `./sprites/${name}.json`,
   );
   const image = await loadImage(sheetSpec.imageURL);
-  let sprites:SpriteSheet;
+  //@ts-ignore
+  const sprites = new SpriteSheet(image, sheetSpec.tileW ? sheetSpec.tileW : 0, sheetSpec.tileH ? sheetSpec.tileH : 0); 
 
-  if(sheetSpec.type === 'world'){
-    sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH);  
+  if(sheetSpec.type === 'world' && sheetSpec.tiles){
+     
     sheetSpec.tiles.forEach((tileSpec) => {
       sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
     });
-  }else{
-    sprites = new SpriteSheet(image, 0, 0);
+  }
+
+  if(sheetSpec.type === 'entity' && sheetSpec.frames){
     sheetSpec.frames.forEach((frameSpec) => {
       sprites.define(frameSpec.name, ...frameSpec.rect)
+    });
+  }
+
+  if(sheetSpec.type === 'world' && sheetSpec.animations){
+    sheetSpec.animations.forEach((animSpec) => {
+      const animation = createAnim(animSpec.frames, animSpec.frameLen);
+      sprites.defineAnim(animSpec.name, animation);
     });
   }
   

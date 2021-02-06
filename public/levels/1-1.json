@@ -1,8 +1,7 @@
 {
     "spriteSheet": "overworld",
 
-    "backgrounds": [
-        {
+    "backgrounds": [{
             "tile": "sky",
             "ranges": [
                 [
@@ -127,6 +126,8 @@
             "tile": "chance",
             "type": "ground",
             "ranges": [
+                [2, 2],
+
                 [23, 9],
                 [28, 9],
                 [30, 9],

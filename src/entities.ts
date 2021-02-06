@@ -22,7 +22,7 @@ export async function createMario() {
   }
 
   mario.draw = function (context: CanvasRenderingContext2D) {
-    sprite.draw(routeMario(this), context, 0, 0);
+    sprite.draw(routeMario(this), context, 0, 0, mario.go.heading < 0);
   };
   return mario;
 }
