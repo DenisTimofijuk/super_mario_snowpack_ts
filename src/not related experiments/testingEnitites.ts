@@ -43,17 +43,30 @@ class ACCdeppartment extends Deppartment {
 type Departments = ITdeppartment | ACCdeppartment;
 class Office {
   departments: Array<Departments>;
-  it!: ITdeppartment;
-  acc!: ACCdeppartment;
-  // [key: string]: any;
+
+  it!: ITdeppartment;     //Current workaround
+  acc!: ACCdeppartment;   //Current workaround
+  // [key: string]: any;  // <= Don't like this
+
   constructor() {
     this.departments = [];
   }
 
   addDepartment<T extends Departments>(Department: T) {
     this.departments.push(Department);
-    this[Department.name] = Department;
-    // this[Department.name] = Department as ITdeppartment & ACCdeppartment;
+    // this[Department.name] = Department as ITdeppartment & ACCdeppartment; //Working workaround, but would like to have something smarter
+
+
+    /**
+      Type 'T' is not assignable to type 'ITdeppartment & ACCdeppartment'.
+        Type 'Departments' is not assignable to type 'ITdeppartment & ACCdeppartment'.
+          Type 'ITdeppartment' is not assignable to type 'ITdeppartment & ACCdeppartment'.
+            Type 'ITdeppartment' is missing the following properties from type 'ACCdeppartment': accounts, addAccount
+              Type 'T' is not assignable to type 'ITdeppartment'.
+                Type 'Departments' is not assignable to type 'ITdeppartment'.
+                  Property 'checkNetwork' is missing in type 'ACCdeppartment' but required in type 'ITdeppartment'. ts(2322)
+     */
+    this[Department.name] = Department; // <= ERROR ts(2322)
   }
 }
 

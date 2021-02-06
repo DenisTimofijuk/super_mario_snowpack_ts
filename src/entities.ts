@@ -15,7 +15,7 @@ export async function createMario() {
   const runAnim = createAnim(['run-1', 'run-2', 'run-3'], 10);
   function routeMario(mario:Entity): MarioFrameName {
     if(mario.go.dir !== 0){
-      return runAnim(mario.go.distance);
+      return runAnim(mario.go.distance) as MarioFrameName;
     }
 
     return 'idle';

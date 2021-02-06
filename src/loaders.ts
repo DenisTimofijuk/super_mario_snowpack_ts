@@ -85,7 +85,6 @@ export async function loadSpriteSheet(name: Sprite_JSON_file_name) {
   const sprites = new SpriteSheet(image, sheetSpec.tileW ? sheetSpec.tileW : 0, sheetSpec.tileH ? sheetSpec.tileH : 0); 
 
   if(sheetSpec.type === 'world' && sheetSpec.tiles){
-     
     sheetSpec.tiles.forEach((tileSpec) => {
       sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
     });
