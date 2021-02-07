@@ -1,22 +1,26 @@
 import type Entity from './Entity';
 import KeyboardState from './keyboardState';
 
-export function setupKeyboard(entity: Entity) {
+export function setupKeyboard(mario: Entity) {
   const input = new KeyboardState();
   input.addMapping('ArrowUp', (keystate) => {
     if (keystate) {
-      entity.jump.start();
+      mario.jump.start();
     } else {
-      entity.jump.cancel();
+      mario.jump.cancel();
     }
   });
 
   input.addMapping('ArrowRight', (keystate) => {
-    entity.go.dir = keystate;
+    mario.go.dir += keystate ? 1 : -1;
   });
 
   input.addMapping('ArrowLeft', (keystate) => {
-    entity.go.dir = -keystate;
+    mario.go.dir += keystate ? -1 : 1;
+  });
+
+  input.addMapping('ShiftLeft', (keystate) => {
+    mario.turbo(keystate)
   });
 
   return input;

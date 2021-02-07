@@ -25,12 +25,15 @@ Promise.all([createMario(), loadLevel('1-1')]).then(
     const input = setupKeyboard(mario);
     input.listenTo(window); 
 
-    setupMouseControl(canvas, mario, camera);
+    // setupMouseControl(canvas, mario, camera);
 
     const timer = new Timer();
     timer.update = function update(deltaTime: number) {
-      level.comp.draw(ctx, camera);
       level.update(deltaTime);
+      if(mario.pos.x > 100){
+        camera.pos.x = mario.pos.x - 100;
+      }
+      level.comp.draw(ctx, camera);
     };
     timer.start();
   },

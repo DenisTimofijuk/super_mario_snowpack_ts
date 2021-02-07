@@ -1,4 +1,4 @@
-enum KeyState {RELEASED, PRESSED};
+export enum KeyState {RELEASED, PRESSED};
 export default class KeyboardState {
     keyStates: Map<string, KeyState>;
     keyMap: Map<string, (a:KeyState)=>void>;
