@@ -1,21 +1,49 @@
-type LevelName = '1-1';
+type Level_JSON_file_name = '1-1';
 type Sprite_JSON_file_name = 'overworld' | 'underworld' | 'mario';
-type MarioSpritename = 'idle';
-type TyileType = 'ground' | 'sky';
+type TyleType = 'ground' | 'sky';
+
 type MarioFrameName = "idle" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
-type BackgroundSpriteName = TyileType | 'chocolate' | 'bricks' | 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
-type SpriteSheetName = BackgroundSpriteName | MarioSpritename | MarioFrameName;
+
+type CloudSprites = "cloud-1-1" | "cloud-1-2" | "cloud-1-3" | "cloud-2-1" | "cloud-2-2" | "cloud-2-3";
+
+type PypeSprites = "pipe-insert-vert-left" | "pipe-insert-vert-right" | "pipe-vert-left" | "pipe-vert-right";
+type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe-3h' | 'pipe-4h';
+
+type ChanceSprites = 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
+type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
+
+type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
+type SpriteSheetName = BackgroundSpriteName | MarioFrameName;
+
 type TraitName = 'jump' | 'go';
 
-type Tyle_JSON = {
+type BackgroundTyle = {
   tile: SpriteSheetName;
-  type: TyileType;
+  type?: TyleType;
   ranges: [[number, number, number?, number?]];
 };
 
+type BackgroundPattern = {
+  pattern: PatternPipeKeys;
+  ranges: Array<[number, number]>;
+}
+
+type PatternBackground = {
+  tile: PypeSprites;
+  type: TyleType,
+  ranges: Array<[number, number]>;
+} 
+
+type LevelPatterns = {
+  [key in PatternPipeKeys]: {
+    backgrounds: Array<PatternBackground | BackgroundPattern>
+  }
+}
+
 type Level_JSON = {
   spriteSheet: Sprite_JSON_file_name;
-  backgrounds: Tyle_JSON[];
+  backgrounds: (BackgroundTyle & BackgroundPattern)[];
+  patterns: LevelPatterns;
 };
 
 type World_tyles = {
@@ -49,8 +77,8 @@ interface Entity_JSON {
   frames: EntityFrame[];
 }
 
-type JSON_object = Level_JSON | Worlds_JSON | Entity_JSON;
-
 interface Overworld_JSON extends Worlds_JSON {}
 interface Underworld_JSON extends Worlds_JSON {}
 interface Mario_JSON extends Entity_JSON {}
+
+type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON;

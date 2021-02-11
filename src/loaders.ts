@@ -13,7 +13,7 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-export function loadLevel(name: LevelName) {
+export function loadLevel(name: Level_JSON_file_name) {
   return loadJSON<Level_JSON>(`./levels/${name}.json`)
     .then((levelSpec) =>
       Promise.all([levelSpec, loadSpriteSheet(levelSpec.spriteSheet)]),
@@ -21,7 +21,7 @@ export function loadLevel(name: LevelName) {
     .then(([levelSpec, backgroundsprites]) => {
       const level = new Level();
 
-      createTiles(level, levelSpec.backgrounds);
+      createTiles(level, levelSpec.backgrounds, levelSpec.patterns);
 
       if (backgroundsprites) {
         const backgroundLayer = createBackgroundLayer(level, backgroundsprites);
@@ -35,9 +35,9 @@ export function loadLevel(name: LevelName) {
     });
 }
 
-function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
+function createTiles(level: Level, backgrounds: (BackgroundTyle | BackgroundPattern | PatternBackground)[], patterns:LevelPatterns, offsetX = 0, offsetY = 0) {
   function applyRange(
-    background: Tyle_JSON,
+    background: (BackgroundTyle | BackgroundPattern | PatternBackground),
     xStart: number,
     xLen: number,
     yStart: number,
@@ -47,10 +47,21 @@ function createTiles(level: Level, backgrounds: Tyle_JSON[]) {
     const yENd = yStart + yLen;
     for (let x = xStart; x < xENd; ++x) {
       for (let y = yStart; y < yENd; ++y) {
-        level.tiles.set(x, y, {
-          name: background.tile,
-          type: background.type,
-        });
+        const derivedX = x + offsetX;
+        const derivedY = y + offsetY;
+        if( 'pattern' in  background ){
+          const backgrounds = patterns[background.pattern].backgrounds;
+          createTiles(level, backgrounds, patterns, derivedX, derivedY);
+        }else {
+          let type;
+          if('type' in background){
+            type = background.type;
+          }
+          level.tiles.set(derivedX, derivedY, {
+            name: background.tile,
+            type: type,
+          });
+        }        
       }
     }
   }
@@ -81,8 +92,17 @@ export async function loadSpriteSheet(name: Sprite_JSON_file_name) {
     `./sprites/${name}.json`,
   );
   const image = await loadImage(sheetSpec.imageURL);
-  //@ts-ignore
-  const sprites = new SpriteSheet(image, sheetSpec.tileW ? sheetSpec.tileW : 0, sheetSpec.tileH ? sheetSpec.tileH : 0); 
+
+  let tileW = 0;
+  if('tileW' in sheetSpec){
+    tileW = sheetSpec.tileW;
+  }
+  let tileH = 0;
+  if('tileH' in sheetSpec){
+    tileH = sheetSpec.tileH;
+  }
+
+  const sprites = new SpriteSheet(image, tileW, tileH); 
 
   if(sheetSpec.type === 'world' && sheetSpec.tiles){
     sheetSpec.tiles.forEach((tileSpec) => {

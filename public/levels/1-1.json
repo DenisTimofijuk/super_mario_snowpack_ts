@@ -179,6 +179,118 @@
                 [185, 8, 11],
                 [184, 9, 12]
             ]
+        },
+        {
+            "pattern": "pipe-2h",
+            "ranges": [
+                [35, 11],
+                [167, 11],
+                [182, 11]
+            ]
+        },
+        {
+            "pattern": "pipe-3h",
+            "ranges": [
+                [45, 10]
+            ]
+        },
+        {
+            "pattern": "pipe-4h",
+            "ranges": [
+                [53, 9],
+                [64, 9]
+            ]
         }
-    ]
+    ],
+
+    "patterns": {
+        "pipe-section-vert": {
+            "backgrounds": [{
+                    "tile": "pipe-vert-left",
+                    "type": "ground",
+                    "ranges": [
+                        [0, 0]
+                    ]
+                },
+                {
+                    "tile": "pipe-vert-right",
+                    "type": "ground",
+                    "ranges": [
+                        [1, 0]
+                    ]
+                }
+            ]
+        },
+        "pipe-cap-vert": {
+            "backgrounds": [{
+                    "tile": "pipe-insert-vert-left",
+                    "type": "ground",
+                    "ranges": [
+                        [0, 0]
+                    ]
+                },
+                {
+                    "tile": "pipe-insert-vert-right",
+                    "type": "ground",
+                    "ranges": [
+                        [1, 0]
+                    ]
+                }
+            ]
+        },
+        "pipe-2h": {
+            "backgrounds": [{
+                    "pattern": "pipe-cap-vert",
+                    "ranges": [
+                        [0, 0]
+                    ]
+                },
+                {
+                    "pattern": "pipe-section-vert",
+                    "ranges": [
+                        [
+                            0, 1,
+                            1, 1
+                        ]
+                    ]
+                }
+            ]
+        },
+        "pipe-3h": {
+            "backgrounds": [{
+                    "pattern": "pipe-cap-vert",
+                    "ranges": [
+                        [0, 0]
+                    ]
+                },
+                {
+                    "pattern": "pipe-section-vert",
+                    "ranges": [
+                        [
+                            0, 1,
+                            1, 2
+                        ]
+                    ]
+                }
+            ]
+        },
+        "pipe-4h": {
+            "backgrounds": [{
+                    "pattern": "pipe-cap-vert",
+                    "ranges": [
+                        [0, 0]
+                    ]
+                },
+                {
+                    "pattern": "pipe-section-vert",
+                    "ranges": [
+                        [
+                            0, 1,
+                            1, 3
+                        ]
+                    ]
+                }
+            ]
+        }
+    }
 }
