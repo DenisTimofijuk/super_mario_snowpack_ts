@@ -1,6 +1,6 @@
 type GridElement = {
-  name: SpriteSheetName;
-  type: TyleType | undefined;
+  name?: SpriteSheetName;
+  type?: TyleType | undefined;
 };
 
 type GetByIndexResult = {

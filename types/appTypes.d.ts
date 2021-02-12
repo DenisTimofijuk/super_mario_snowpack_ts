@@ -7,7 +7,7 @@ type MarioFrameName = "idle" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
 type CloudSprites = "cloud-1-1" | "cloud-1-2" | "cloud-1-3" | "cloud-2-1" | "cloud-2-2" | "cloud-2-3";
 
 type PypeSprites = "pipe-insert-vert-left" | "pipe-insert-vert-right" | "pipe-vert-left" | "pipe-vert-right";
-type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe-3h' | 'pipe-4h';
+type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe-3h' | 'pipe-4h' | 'cloud-single';
 
 type ChanceSprites = 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
 type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
@@ -17,8 +17,8 @@ type SpriteSheetName = BackgroundSpriteName | MarioFrameName;
 
 type TraitName = 'jump' | 'go';
 
-type BackgroundTyle = {
-  tile: SpriteSheetName;
+type BackgroundTile = {
+  name: SpriteSheetName;
   type?: TyleType;
   ranges: [[number, number, number?, number?]];
 };
@@ -29,20 +29,22 @@ type BackgroundPattern = {
 }
 
 type PatternBackground = {
-  tile: PypeSprites;
-  type: TyleType,
+  name: PypeSprites | CloudSprites;
+  type?: TyleType,
   ranges: Array<[number, number]>;
 } 
 
 type LevelPatterns = {
   [key in PatternPipeKeys]: {
-    backgrounds: Array<PatternBackground | BackgroundPattern>
+    tiles: Array<PatternBackground | BackgroundPattern>
   }
 }
 
 type Level_JSON = {
   spriteSheet: Sprite_JSON_file_name;
-  backgrounds: (BackgroundTyle & BackgroundPattern)[];
+  layers:[{
+    tiles: (BackgroundTile & BackgroundPattern)[];
+  }];  
   patterns: LevelPatterns;
 };
 

@@ -2,8 +2,7 @@ import Camera from './Camera';
 import { setupMouseControl } from './debug';
 import { createMario } from './entities';
 import { setupKeyboard } from './input';
-import { createCameraLayer, createCollisionLayer } from './layers';
-import { loadLevel } from './loaders';
+import { loadLevel } from './vaLoaders/level';
 import Timer from './Timer';
 
 const canvas = document.getElementById('screen') as HTMLCanvasElement;
@@ -14,12 +13,6 @@ Promise.all([createMario(), loadLevel('1-1')]).then(
     const camera = new Camera();
 
     mario.pos.set(64, 64);
-
-    // level.comp.layers.push(
-    //   createCollisionLayer(level),
-    //   createCameraLayer(camera)
-    // )
-
     level.entities.add(mario);
 
     const input = setupKeyboard(mario);

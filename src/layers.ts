@@ -1,30 +1,27 @@
 import type Camera from './Camera';
 import type Entity from './Entity';
 import type Level from './level';
+import type { Matrix } from './math';
 import type SpriteSheet from './SpriteSheet';
+import TileResolver from './TileResolver';
 
-export function createBackgroundLayer(level: Level, sprites: SpriteSheet) {
-  const tiles = level.tiles;
-  const resolver = level.tileCollider.tiles;
+export function createBackgroundLayer(level: Level, tiles:Matrix, sprites: SpriteSheet) {
+  const resolver = new TileResolver(tiles);
   const buffer = document.createElement('canvas');
   buffer.width = 256 + 16;
   buffer.height = 240;
   const context = buffer.getContext('2d')!;
 
-  let startIndex:number, endIndex:number;
-
-  function redraw(drawFrom:number, drawTo:number) {
-    startIndex = drawFrom;
-    endIndex = drawTo;
-
+  function redraw(startIndex:number, endIndex:number) {
+    context.clearRect(0, 0, buffer.width, buffer.height);
     for(let x = startIndex; x<= endIndex; ++x){
       const col = tiles.grid[x];
       if(col){
         col.forEach((tile, y) => {
-          if(sprites.animation.has(tile.name)){
-            sprites.drawAnim(tile.name, context, x - startIndex, y, level.totalTime);
+          if(sprites.animation.has(tile.name!)){
+            sprites.drawAnim(tile.name!, context, x - startIndex, y, level.totalTime);
           }else{
-            sprites.drawTile(tile.name, context, x - startIndex, y);      
+            sprites.drawTile(tile.name!, context, x - startIndex, y);      
           }          
         })
       }
@@ -58,45 +55,45 @@ export function createSpriteLayer(entities: Set<Entity>, width = 64, height = 64
   };
 }
 
-export function createCollisionLayer(level:Level) {
-  const resolvedTiles:{x:number, y:number}[] = [];
-  const tileResolver = level.tileCollider.tiles;
-  const tileSize = tileResolver.tileSize;
+// export function createCollisionLayer(level:Level) {
+//   const resolvedTiles:{x:number, y:number}[] = [];
+//   const tileResolver = level.tileCollider.tiles;
+//   const tileSize = tileResolver.tileSize;
 
-  const getByIndexOriginal = tileResolver.getByIndex;
+//   const getByIndexOriginal = tileResolver.getByIndex;
 
-  tileResolver.getByIndex = function getByIndexFale(x:number, y:number) {
-    resolvedTiles.push({x, y});
-    return getByIndexOriginal.call(tileResolver, x, y);
-  }
+//   tileResolver.getByIndex = function getByIndexFale(x:number, y:number) {
+//     resolvedTiles.push({x, y});
+//     return getByIndexOriginal.call(tileResolver, x, y);
+//   }
 
-  return function drawCollision(context:CanvasRenderingContext2D, camera:Camera) {
-    context.strokeStyle = "blue";
-    resolvedTiles.forEach(({x, y}) => {
-      context.beginPath();
-      context.rect(
-        x * tileSize - camera.pos.x,
-        y * tileSize - camera.pos.y,
-        tileSize,
-        tileSize);
-      context.stroke();
-    })
+//   return function drawCollision(context:CanvasRenderingContext2D, camera:Camera) {
+//     context.strokeStyle = "blue";
+//     resolvedTiles.forEach(({x, y}) => {
+//       context.beginPath();
+//       context.rect(
+//         x * tileSize - camera.pos.x,
+//         y * tileSize - camera.pos.y,
+//         tileSize,
+//         tileSize);
+//       context.stroke();
+//     })
 
-    context.strokeStyle = "red";
-    level.entities.forEach(entity => {
-      context.beginPath();
-      context.rect(
-        entity.pos.x - camera.pos.x,
-        entity.pos.y - camera.pos.y,
-        entity.size.x,
-        entity.size.y
-        );
-      context.stroke();
-    })
+//     context.strokeStyle = "red";
+//     level.entities.forEach(entity => {
+//       context.beginPath();
+//       context.rect(
+//         entity.pos.x - camera.pos.x,
+//         entity.pos.y - camera.pos.y,
+//         entity.size.x,
+//         entity.size.y
+//         );
+//       context.stroke();
+//     })
 
-    resolvedTiles.length = 0;
-  }
-}
+//     resolvedTiles.length = 0;
+//   }
+// }
 
 export function createCameraLayer(cameraToDraw:Camera) {
   return function drawCameraRect(context:CanvasRenderingContext2D, fromCamera:Camera) {
