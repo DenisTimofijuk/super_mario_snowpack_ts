@@ -29,19 +29,19 @@ export async function loadSpriteSheet(name: Sprite_JSON_file_name) {
 
   const sprites = new SpriteSheet(image, tileW, tileH); 
 
-  if(sheetSpec.type === 'world' && sheetSpec.tiles){
+  if("tiles" in sheetSpec){
     sheetSpec.tiles.forEach((tileSpec) => {
       sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
     });
   }
 
-  if(sheetSpec.type === 'entity' && sheetSpec.frames){
+  if("frames" in sheetSpec){
     sheetSpec.frames.forEach((frameSpec) => {
       sprites.define(frameSpec.name, ...frameSpec.rect)
     });
   }
 
-  if(sheetSpec.type === 'world' && sheetSpec.animations){
+  if("animations" in sheetSpec){
     sheetSpec.animations.forEach((animSpec) => {
       const animation = createAnim(animSpec.frames, animSpec.frameLen);
       sprites.defineAnim(animSpec.name, animation);

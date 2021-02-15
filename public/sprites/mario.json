@@ -1,5 +1,4 @@
 {
-    "type": "entity",
 
     "imageURL": "/img/characters.gif",
 
@@ -27,5 +26,15 @@
             "name": "jump",
             "rect": [355, 44, 16, 16]
         }
-    ]
+    ],
+
+    "animations": [{
+        "name": "run",
+        "frameLen": 6,
+        "frames": [
+            "run-1",
+            "run-2",
+            "run-3"
+        ]
+    }]
 }

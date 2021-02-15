@@ -17,6 +17,8 @@ export class Go extends Trait {
     this.heading = 1;
   }
 
+  obstruct(){};
+
   update(entity: Entity, deltaTime: number) {
     const absX = Math.abs(entity.vel.x);
     if (this.dir !== 0) {

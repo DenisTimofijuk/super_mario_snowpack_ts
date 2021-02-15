@@ -1,8 +1,9 @@
 type Level_JSON_file_name = '1-1';
-type Sprite_JSON_file_name = 'overworld' | 'underworld' | 'mario';
+type Sprite_JSON_file_name = 'overworld' | 'underworld' | 'mario' | 'koopa' | 'goomba';
 type TyleType = 'ground' | 'sky';
 
-type MarioFrameName = "idle" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
+type MarioFrameName = "idle" | "run" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
+type EnemiesFrameName = "flat" | "walk" | "walk-1" | "walk-2";
 
 type CloudSprites = "cloud-1-1" | "cloud-1-2" | "cloud-1-3" | "cloud-2-1" | "cloud-2-2" | "cloud-2-3";
 
@@ -13,9 +14,9 @@ type ChanceSprites = 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
 type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
 
 type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
-type SpriteSheetName = BackgroundSpriteName | MarioFrameName;
+type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName;
 
-type TraitName = 'jump' | 'go';
+type TraitName = 'jump' | 'go' | 'pendulumwalk';
 
 type BackgroundTile = {
   name: SpriteSheetName;
@@ -53,20 +54,18 @@ type World_tyles = {
   index: [number, number];
 };
 
-interface WorldAnimation {
+interface SpriteSheetAnimation {
   name: SpriteSheetName;
   frameLen:number;
-  frames: BackgroundSpriteName[];
+  frames: (BackgroundSpriteName | MarioFrameName)[];
 }
 interface Worlds_JSON {
-  type: 'world';
   imageURL: string;
   tileW: number;
   tileH: number;
   tiles: World_tyles[];
-  animations: WorldAnimation[];
+  animations: SpriteSheetAnimation[];
 }
-
 
 interface EntityFrame {
   name: MarioFrameName;
@@ -74,13 +73,15 @@ interface EntityFrame {
 }
 
 interface Entity_JSON {
-  type: 'entity';
   imageURL: string;
   frames: EntityFrame[];
+  animations: SpriteSheetAnimation[];
 }
 
 interface Overworld_JSON extends Worlds_JSON {}
 interface Underworld_JSON extends Worlds_JSON {}
 interface Mario_JSON extends Entity_JSON {}
+interface Goomba_JSON extends Entity_JSON {}
+interface Koopa_JSON extends Entity_JSON {}
 
-type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON;
+type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON | Goomba_JSON | Koopa_JSON;
