@@ -1,5 +1,7 @@
+type EntityName = 'mario' | 'koopa' | 'goomba';
+
 type Level_JSON_file_name = '1-1';
-type Sprite_JSON_file_name = 'overworld' | 'underworld' | 'mario' | 'koopa' | 'goomba';
+type Sprite_JSON_file_name = 'overworld' | 'underworld' | EntityName;
 type TyleType = 'ground' | 'sky';
 
 type MarioFrameName = "idle" | "run" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
@@ -85,3 +87,4 @@ interface Goomba_JSON extends Entity_JSON {}
 interface Koopa_JSON extends Entity_JSON {}
 
 type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON | Goomba_JSON | Koopa_JSON;
+

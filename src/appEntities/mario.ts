@@ -16,10 +16,10 @@ function createMarioFactory(sprite: SpriteSheet) {
   const runAnim = sprite.animation.get('run');
 
   function routeFrame(mario: Entity): MarioFrameName {
-    if (mario.jump.falling) {
+    if (mario.jump && mario.jump.falling) {
       return 'jump';
     }
-    if (mario.go.distance > 0) {
+    if (mario.go && mario.go.distance > 0) {
       if (
         (mario.vel.x > 0 && mario.go.dir < 0) ||
         (mario.vel.x < 0 && mario.go.dir > 0)
@@ -33,11 +33,11 @@ function createMarioFactory(sprite: SpriteSheet) {
   }
 
   function setTurboState(this: Entity, turboOn: KeyState) {
-    this.go.dragFactor = turboOn ? FAST_DRAG : SLOW_DRAG;
+    this.go && (this.go.dragFactor = turboOn ? FAST_DRAG : SLOW_DRAG);
   }
 
   function drawMario(this: Entity, context: CanvasRenderingContext2D) {
-    sprite.draw(routeFrame(this), context, 0, 0, this.go.heading < 0);
+    sprite.draw(routeFrame(this), context, 0, 0, this.go && this.go.heading < 0);
   }
 
   return function createMario() {

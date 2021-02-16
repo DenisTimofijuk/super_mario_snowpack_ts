@@ -1,22 +1,38 @@
-import type Entity from './Entity';
+import Entity, { displayMissingTrait } from './Entity';
 import KeyboardState from './keyboardState';
 
 export function setupKeyboard(mario: Entity) {
   const input = new KeyboardState();
   input.addMapping('ArrowUp', (keystate) => {
     if (keystate) {
-      mario.jump.start();
+      if(mario.jump){
+        mario.jump.start()
+      }else{
+        displayMissingTrait('mario jump.start', 'jump');
+      }       
     } else {
-      mario.jump.cancel();
+      if(mario.jump){
+        mario.jump.cancel()
+      }else{
+        displayMissingTrait('mario jum.cancel', 'jump');
+      }
     }
   });
 
   input.addMapping('ArrowRight', (keystate) => {
-    mario.go.dir += keystate ? 1 : -1;
+    if(mario.go){
+      mario.go.dir += keystate ? 1 : -1
+    }else{
+      displayMissingTrait('mario', 'go');
+    }
   });
 
   input.addMapping('ArrowLeft', (keystate) => {
-    mario.go.dir += keystate ? -1 : 1;
+    if(mario.go){
+      mario.go.dir += keystate ? -1 : 1
+    }else{
+      displayMissingTrait('mario', 'go');
+    }
   });
 
   input.addMapping('ShiftLeft', (keystate) => {

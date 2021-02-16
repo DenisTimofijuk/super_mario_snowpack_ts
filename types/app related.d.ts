@@ -10,3 +10,7 @@ type GetByIndexResult = {
   x1: number;
   x2: number;
 };
+
+type EntityFactorie = {
+  [key in EntityName]: () => Entity
+}

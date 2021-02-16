@@ -1,3 +1,4 @@
+import BoundingBox from './boundingBox';
 import type { KeyState } from './keyboardState';
 import { Vec2 } from './math';
 import type { Go } from './traits/Go';
@@ -23,16 +24,21 @@ export default class Entity {
   pos: Vec2;
   vel: Vec2;
   traits: Array<TraitType>;
-  jump!: Jump;
-  go!: Go;
-  pendulumwalk!: PendulumWalk;
+  jump?: Jump;
+  go?: Go;
+  pendulumwalk?: PendulumWalk;
   size: Vec2;
   lifetime: number;
+  offset: Vec2;
+  bounds: BoundingBox;
   constructor() {
     this.pos = new Vec2(0, 0);
     this.vel = new Vec2(0, 0);
     this.size = new Vec2(0, 0);
+    this.offset = new Vec2(0, 0);
+    this.bounds = new BoundingBox(this.pos, this.size, this.offset);
     this.lifetime = 0;
+    
     this.traits = [];
   }
 
@@ -58,4 +64,9 @@ export default class Entity {
   draw(a: CanvasRenderingContext2D) {}
 
   turbo(a: KeyState) {}
+}
+
+
+export function displayMissingTrait(entityName:string, name:TraitName) {
+  console.warn(`[${name}] trait was not found on ${entityName}`);
 }
