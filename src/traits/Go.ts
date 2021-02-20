@@ -19,6 +19,8 @@ export class Go extends Trait {
 
   obstruct(){};
 
+  collides(a:Entity, b:Entity){};
+
   update(entity: Entity, deltaTime: number) {
     const absX = Math.abs(entity.vel.x);
     if (this.dir !== 0) {

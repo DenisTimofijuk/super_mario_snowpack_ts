@@ -1,9 +1,14 @@
+import type { Behavior } from './appEntities/Goomba';
 import BoundingBox from './boundingBox';
 import type { KeyState } from './keyboardState';
+import type Level from './level';
 import { Vec2 } from './math';
 import type { Go } from './traits/Go';
 import type { Jump } from './traits/Jump';
+import type { Killable } from './traits/Killable';
 import type { PendulumWalk } from './traits/PendulumWalk';
+import type { PlayerController } from './traits/PlayerController';
+import type { Stomper } from './traits/Stomper';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -16,17 +21,22 @@ export abstract class Trait {
 
   abstract obstruct(a: Entity, b: symbol): void;
   abstract update(a: Entity, b: number): void;
+  abstract collides(a: Entity, b:Entity): void;
 }
 
-export type TraitType = Jump | Go | PendulumWalk;
-type TraitTypeTSworkaround = Jump & Go & PendulumWalk;
+export type TraitType = Jump | Go | PendulumWalk | Behavior | Stomper | Killable | PlayerController;
+type TraitTypeTSworkaround = Jump & Go & PendulumWalk & Behavior & Stomper & Killable & PlayerController;
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
   traits: Array<TraitType>;
   jump?: Jump;
   go?: Go;
+  behavior?: Behavior;
   pendulumwalk?: PendulumWalk;
+  stomper?: Stomper;
+  killable? :Killable;
+  playercontroller?: PlayerController;
   size: Vec2;
   lifetime: number;
   offset: Vec2;
@@ -47,15 +57,21 @@ export default class Entity {
     this[trait.NAME] = trait as TraitTypeTSworkaround;
   }
 
+  collides(candidate:Entity){
+    this.traits.forEach((trait) => {
+      trait.collides(this, candidate);
+    });
+  }
+
   obstruct(side: symbol) {
     this.traits.forEach((trait) => {
       trait.obstruct(this, side);
     });
   }
 
-  update(deltatime: number) {
+  update(deltatime: number, level:Level) {
     this.traits.forEach((trait) => {
-      trait.update(this, deltatime);
+      trait.update(this, deltatime, level);
     });
 
     this.lifetime += deltatime;

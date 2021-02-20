@@ -16,4 +16,6 @@ export class PendulumWalk extends Trait {
         this.speed = -this.speed;
       }
   }
+
+  collides(a:Entity, b:Entity){}
 }

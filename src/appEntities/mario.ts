@@ -4,6 +4,8 @@ import type { KeyState } from '../keyboardState';
 import { loadSpriteSheet } from '../loaders';
 import { Go } from '../traits/Go';
 import { Jump } from '../traits/Jump';
+import { Stomper } from '../traits/Stomper';
+import { Killable } from '../traits/Killable';
 
 const SLOW_DRAG = 1 / 1000;
 const FAST_DRAG = 1 / 5000;
@@ -45,6 +47,10 @@ function createMarioFactory(sprite: SpriteSheet) {
     mario.size.set(14, 16);
     mario.addTrait(new Go());
     mario.addTrait(new Jump());
+    mario.addTrait(new Killable());
+    mario.addTrait(new Stomper());
+
+    mario.killable!.removeAfter = 0;
 
     mario.turbo = setTurboState.bind(mario);
     mario.draw = drawMario.bind(mario);
