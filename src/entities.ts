@@ -3,6 +3,10 @@ import { loadKoopa } from "./appEntities/Koopa";
 import { loadMario } from "./appEntities/mario";
 import type Entity from "./Entity";
 
+export type EntityFactorie = {
+  [key in EntityName]: () => Entity
+}
+
 export function loadEntities() {
   const entityFactories:EntityFactorie = <any>{};
 

@@ -43,12 +43,18 @@ type LevelPatterns = {
   }
 }
 
+type Level_entities = {
+  name: EntityName;
+  pos: [number, number];
+}
+
 type Level_JSON = {
   spriteSheet: Sprite_JSON_file_name;
   layers:[{
     tiles: (BackgroundTile & BackgroundPattern)[];
   }];  
   patterns: LevelPatterns;
+  entities: Level_entities[];
 };
 
 type World_tyles = {

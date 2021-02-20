@@ -3,37 +3,47 @@
 
     "patterns": {
         "cloud-single": {
-            "tiles": [
-                {
+            "tiles": [{
                     "name": "cloud-1-1",
-                    "ranges": [[0, 0]]
+                    "ranges": [
+                        [0, 0]
+                    ]
                 },
                 {
                     "name": "cloud-1-2",
-                    "ranges": [[1, 0]]
+                    "ranges": [
+                        [1, 0]
+                    ]
                 },
                 {
                     "name": "cloud-1-3",
-                    "ranges": [[2, 0]]
+                    "ranges": [
+                        [2, 0]
+                    ]
                 },
                 {
                     "name": "cloud-2-1",
-                    "ranges": [[0, 1]]
+                    "ranges": [
+                        [0, 1]
+                    ]
                 },
                 {
                     "name": "cloud-2-2",
-                    "ranges": [[1, 1]]
+                    "ranges": [
+                        [1, 1]
+                    ]
                 },
                 {
                     "name": "cloud-2-3",
-                    "ranges": [[2, 1]]
+                    "ranges": [
+                        [2, 1]
+                    ]
                 }
             ]
         },
 
         "pipe-section-vert": {
-            "tiles": [
-                {
+            "tiles": [{
                     "name": "pipe-vert-left",
                     "type": "ground",
                     "ranges": [
@@ -51,8 +61,7 @@
         },
 
         "pipe-cap-vert": {
-            "tiles": [
-                {
+            "tiles": [{
                     "name": "pipe-insert-vert-left",
                     "type": "ground",
                     "ranges": [
@@ -70,8 +79,7 @@
         },
 
         "pipe-2h": {
-            "tiles": [
-                {
+            "tiles": [{
                     "pattern": "pipe-cap-vert",
                     "ranges": [
                         [0, 0]
@@ -90,8 +98,7 @@
         },
 
         "pipe-3h": {
-            "tiles": [
-                {
+            "tiles": [{
                     "pattern": "pipe-cap-vert",
                     "ranges": [
                         [0, 0]
@@ -110,8 +117,7 @@
         },
 
         "pipe-4h": {
-            "tiles": [
-                {
+            "tiles": [{
                     "pattern": "pipe-cap-vert",
                     "ranges": [
                         [0, 0]
@@ -130,10 +136,8 @@
         }
     },
 
-    "layers": [
-        {
-            "tiles": [
-                {
+    "layers": [{
+            "tiles": [{
                     "name": "sky",
                     "ranges": [
                         [
@@ -209,8 +213,7 @@
             ]
         },
         {
-            "tiles": [
-                {
+            "tiles": [{
                     "name": "bricks",
                     "type": "ground",
                     "ranges": [
@@ -355,6 +358,16 @@
                     ]
                 }
             ]
+        }
+    ],
+
+    "entities": [{
+            "name": "koopa",
+            "pos": [260, 0]
+        },
+        {
+            "name": "goomba",
+            "pos": [220, 0]
         }
     ]
 }

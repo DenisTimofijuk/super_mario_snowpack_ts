@@ -11,6 +11,3 @@ type GetByIndexResult = {
   x2: number;
 };
 
-type EntityFactorie = {
-  [key in EntityName]: () => Entity
-}

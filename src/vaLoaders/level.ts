@@ -2,47 +2,72 @@ import { Matrix } from '../math';
 import { createBackgroundLayer, createSpriteLayer } from '../layers';
 import Level from '../level';
 import { loadJSON, loadSpriteSheet } from '../loaders';
+import type SpriteSheet from 'src/SpriteSheet';
+import type { EntityFactorie } from 'src/entities';
 
-export function loadLevel(name: Level_JSON_file_name) {
-  console.log('load level');
+function setupCollision(levelSpec: Level_JSON, level: Level) {
+  const mergedTiles = levelSpec.layers.reduce((mergedTiles, layerSpec) => {
+    return mergedTiles.concat(layerSpec.tiles);
+  }, <(BackgroundTile & BackgroundPattern)[]>[]);
 
-  return loadJSON<Level_JSON>(`./levels/${name}.json`)
-    .then((levelSpec) =>
-      Promise.all([levelSpec, loadSpriteSheet(levelSpec.spriteSheet)]),
-    )
-    .then(([levelSpec, backgroundsprites]) => {
-      const level = new Level();
-      
-      const mergedTiles = levelSpec.layers.reduce((mergedTiles, layerSpec) => {
-        return mergedTiles.concat(layerSpec.tiles);
-      }, <(BackgroundTile & BackgroundPattern)[]>[]);
+  const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns);
+  level.setCollisionGrid(collisionGrid);
+}
 
-      const collisionGrid = createCollisionGrid(
-        mergedTiles,
-        levelSpec.patterns,
+function setupBackground(
+  levelSpec: Level_JSON,
+  level: Level,
+  backgroundsprites: SpriteSheet,
+) {
+  levelSpec.layers.forEach((layer) => {
+    const backgroundGrid = createBackgroundGrid(
+      layer.tiles,
+      levelSpec.patterns,
+    );
+    if (backgroundsprites) {
+      const backgroundLayer = createBackgroundLayer(
+        level,
+        backgroundGrid,
+        backgroundsprites,
       );
-      level.setCollisionGrid(collisionGrid);
+      level.comp.layers.push(backgroundLayer);
+    }
+  });
+}
 
-      levelSpec.layers.forEach((layer) => {
-        const backgroundGrid = createBackgroundGrid(
-          layer.tiles,
-          levelSpec.patterns,
-        );
-        if (backgroundsprites) {
-          const backgroundLayer = createBackgroundLayer(
-            level,
-            backgroundGrid,
-            backgroundsprites,
-          );
-          level.comp.layers.push(backgroundLayer);
-        }
+function setupEntities(
+  levelSpec: Level_JSON,
+  level: Level,
+  entityFactory: EntityFactorie,
+) {
+  
+  levelSpec.entities.forEach( ({name, pos:[x, y]}) => {
+    const createEntity = entityFactory[name];
+    const entity = createEntity();
+    entity.pos.set(x, y);
+    level.entities.add(entity);
+  })
+
+  const spriteLayer = createSpriteLayer(level.entities);
+  level.comp.layers.push(spriteLayer);
+}
+
+export function createLevelLoader(entityFactory: EntityFactorie) {
+  return function loadLevel(name: Level_JSON_file_name) {
+    return loadJSON<Level_JSON>(`./levels/${name}.json`)
+      .then((levelSpec) =>
+        Promise.all([levelSpec, loadSpriteSheet(levelSpec.spriteSheet)]),
+      )
+      .then(([levelSpec, backgroundsprites]) => {
+        const level = new Level();
+
+        setupCollision(levelSpec, level);
+        setupBackground(levelSpec, level, backgroundsprites);
+        setupEntities(levelSpec, level, entityFactory);
+
+        return level;
       });
-
-      const spriteLayer = createSpriteLayer(level.entities);
-      level.comp.layers.push(spriteLayer);
-
-      return level;
-    });
+  };
 }
 
 function createCollisionGrid(
@@ -51,7 +76,11 @@ function createCollisionGrid(
 ) {
   const grid = new Matrix();
   for (const { tile, x, y } of expandTiles(tiles, patterns)) {
-    grid.set(x, y, { type: tile.type });
+    let type;
+    if ('type' in tile) {
+      type = tile.type;
+    }
+    grid.set(x, y, { type: type });
   }
 
   return grid;
@@ -63,7 +92,11 @@ function createBackgroundGrid(
 ) {
   const grid = new Matrix();
   for (const { tile, x, y } of expandTiles(tiles, patterns)) {
-    grid.set(x, y, { name: tile.name });
+    let name;
+    if ('name' in tile) {
+      name = tile.name;
+    }
+    grid.set(x, y, { name: name });
   }
 
   return grid;
@@ -109,46 +142,44 @@ function* expandRanges(
   ranges: [number, number, (number | undefined)?, (number | undefined)?][],
 ) {
   for (const range of ranges) {
-    for (const item of expandSpanRange(range)) {
-      yield item;
-    }
+    yield* expandSpanRange(range);
   }
 }
 
-function expandTiles(
+function* expandTiles(
   tiles: (BackgroundTile | BackgroundPattern | PatternBackground)[],
   patterns: LevelPatterns,
 ) {
-  const expandedTiles: {
-    tile: BackgroundTile | PatternBackground;
-    x: number;
-    y: number;
-  }[] = [];
-
-  function walkTiles(
+  function* walkTiles(
     tiles: (BackgroundTile | BackgroundPattern | PatternBackground)[],
     offsetX: number,
     offsetY: number,
-  ) {
+  ): Generator<
+    {
+      tile: BackgroundTile | BackgroundPattern | PatternBackground;
+      x: number;
+      y: number;
+    },
+    void,
+    unknown
+  > {
     for (const tile of tiles) {
       for (const { x, y } of expandRanges(tile.ranges)) {
         const derivedX = x + offsetX;
         const derivedY = y + offsetY;
         if ('pattern' in tile) {
           const tiles = patterns[tile.pattern].tiles;
-          walkTiles(tiles, derivedX, derivedY);
+          yield* walkTiles(tiles, derivedX, derivedY);
         } else {
-          expandedTiles.push({
+          yield {
             tile,
             x: derivedX,
             y: derivedY,
-          });
+          };
         }
       }
     }
   }
 
-  walkTiles(tiles, 0, 0);
-
-  return expandedTiles;
+  yield* walkTiles(tiles, 0, 0);
 }
