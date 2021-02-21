@@ -1,4 +1,5 @@
-import type { Behavior } from './appEntities/Goomba';
+import type { Behavior as GoombaBehaviour } from './appEntities/Goomba';
+import type { Behavior as KoopaBehaviour } from './appEntities/Koopa';
 import BoundingBox from './boundingBox';
 import type { KeyState } from './keyboardState';
 import type Level from './level';
@@ -6,7 +7,7 @@ import { Vec2 } from './math';
 import type { Go } from './traits/Go';
 import type { Jump } from './traits/Jump';
 import type { Killable } from './traits/Killable';
-import type { PendulumWalk } from './traits/PendulumWalk';
+import type { PendulumMoove } from './traits/PendulumMoove';
 import type { PlayerController } from './traits/PlayerController';
 import type { Stomper } from './traits/Stomper';
 
@@ -24,16 +25,16 @@ export abstract class Trait {
   abstract collides(a: Entity, b:Entity): void;
 }
 
-export type TraitType = Jump | Go | PendulumWalk | Behavior | Stomper | Killable | PlayerController;
-type TraitTypeTSworkaround = Jump & Go & PendulumWalk & Behavior & Stomper & Killable & PlayerController;
+export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour;
+type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour;
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
   traits: Array<TraitType>;
   jump?: Jump;
   go?: Go;
-  behavior?: Behavior;
-  pendulumwalk?: PendulumWalk;
+  behavior?: GoombaBehaviour | KoopaBehaviour;
+  pendulummoove?: PendulumMoove;
   stomper?: Stomper;
   killable? :Killable;
   playercontroller?: PlayerController;
@@ -41,6 +42,7 @@ export default class Entity {
   lifetime: number;
   offset: Vec2;
   bounds: BoundingBox;
+  canCollide: boolean;
   constructor() {
     this.pos = new Vec2(0, 0);
     this.vel = new Vec2(0, 0);
@@ -48,6 +50,7 @@ export default class Entity {
     this.offset = new Vec2(0, 0);
     this.bounds = new BoundingBox(this.pos, this.size, this.offset);
     this.lifetime = 0;
+    this.canCollide = true;
     
     this.traits = [];
   }

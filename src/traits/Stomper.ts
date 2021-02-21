@@ -1,26 +1,24 @@
 import Entity, { Trait } from "../Entity";
 
 export class Stomper extends Trait{
-    queueBounce: boolean;
     bounceSpeed: number;
     constructor() {
         super('stomper');
-        this.queueBounce = false;
         this.bounceSpeed = 400;
     }
 
-    bounce(){
-        this.queueBounce = true;
+    bounce(us:Entity, them:Entity){
+        us.bounds.bottom = them.bounds.top;
+        us.vel.y = -this.bounceSpeed;
     }
 
-    collides(a: Entity, b:Entity){}
+    collides(us: Entity, them:Entity){
+        if(them.killable && us.vel.y > them.vel.y){
+            this.bounce(us, them);
+        }
+    }
 
     obstruct(){}
 
-    update(entity:Entity){
-        if(this.queueBounce){
-            entity.vel.y = -this.bounceSpeed;
-            this.queueBounce = false;
-        }
-    }
+    update(entity:Entity){}
 }

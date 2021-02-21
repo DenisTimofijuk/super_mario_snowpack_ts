@@ -5,7 +5,7 @@ type Sprite_JSON_file_name = 'overworld' | 'underworld' | EntityName;
 type TyleType = 'ground' | 'sky';
 
 type MarioFrameName = "idle" | "run" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
-type EnemiesFrameName = "flat" | "walk" | "walk-1" | "walk-2";
+type EnemiesFrameName = "flat" | "walk" | "walk-1" | "walk-2" | "hiding" | "hiding-with-legs" | "wake";
 
 type CloudSprites = "cloud-1-1" | "cloud-1-2" | "cloud-1-3" | "cloud-2-1" | "cloud-2-2" | "cloud-2-3";
 
@@ -18,7 +18,7 @@ type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
 type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
 type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName;
 
-type TraitName = 'jump' | 'go' | 'pendulumwalk' | 'behavior' | 'stomper' | 'killable' | 'playercontroller';
+type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller';
 
 type BackgroundTile = {
   name: SpriteSheetName;
@@ -65,7 +65,7 @@ type World_tyles = {
 interface SpriteSheetAnimation {
   name: SpriteSheetName;
   frameLen:number;
-  frames: (BackgroundSpriteName | MarioFrameName)[];
+  frames: (BackgroundSpriteName | MarioFrameName | EnemiesFrameName)[];
 }
 interface Worlds_JSON {
   imageURL: string;
