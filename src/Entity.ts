@@ -17,12 +17,24 @@ export const Sides = {
   LEFT: Symbol('left'),
   RIGHT: Symbol('ryght')
 };
-export abstract class Trait {
-  constructor(public readonly NAME: TraitName) {}
+export class Trait {
+  tasks: Function[];
+  constructor(public readonly NAME: TraitName) {
+    this.tasks = [];
+  }
 
-  abstract obstruct(a: Entity, b: symbol): void;
-  abstract update(a: Entity, b: number): void;
-  abstract collides(a: Entity, b:Entity): void;
+  obstruct(a: Entity, b: symbol){};
+  update(a: Entity, b: number){};
+  collides(a: Entity, b:Entity){};
+
+  queue(task:Function){
+    this.tasks.push(task);
+  }
+
+  finalize(){
+    this.tasks.forEach(task => task());
+    this.tasks.length = 0;
+  }
 }
 
 export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour;
@@ -83,6 +95,10 @@ export default class Entity {
   draw(a: CanvasRenderingContext2D) {}
 
   turbo(a: KeyState) {}
+
+  finalize(){
+    this.traits.forEach(trait => trait.finalize());
+  }
 }
 
 
