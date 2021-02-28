@@ -18,7 +18,7 @@ type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
 type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
 type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName;
 
-type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller';
+type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller' | 'solid' | 'physics';
 
 type BackgroundTile = {
   name: SpriteSheetName;

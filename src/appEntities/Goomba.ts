@@ -3,6 +3,8 @@ import type SpriteSheet from '../SpriteSheet';
 import { loadSpriteSheet } from '../loaders';
 import { PendulumMoove } from '../traits/PendulumMoove';
 import { Killable } from '../traits/Killable';
+import { Solid } from '../traits/Solid';
+import { Physics } from '../traits/Physics';
 
 export function loadGoomba() {
   return loadSpriteSheet('goomba').then(createGoombaFactory);
@@ -50,6 +52,9 @@ function createGoombaFactory(sprite: SpriteSheet) {
   return function createGoomba() {
     const goomba = new Entity();
     goomba.size.set(16, 16);
+
+    goomba.addTrait(new Physics());
+    goomba.addTrait(new Solid());
     goomba.addTrait(new PendulumMoove());
     goomba.addTrait(new Behavior());
     goomba.addTrait(new Killable());

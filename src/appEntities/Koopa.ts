@@ -3,6 +3,8 @@ import type SpriteSheet from '../SpriteSheet';
 import { loadSpriteSheet } from '../loaders';
 import { PendulumMoove } from '../traits/PendulumMoove';
 import { Killable } from '../traits/Killable';
+import { Solid } from '../traits/Solid';
+import { Physics } from '../traits/Physics';
 
 export function loadKoopa() {
   return loadSpriteSheet('koopa').then(createKoopaFactory);
@@ -60,7 +62,7 @@ export class Behavior extends Trait {
     } else if (this.state === STATE_HIDING) {
       us.killable?.kill();
       us.vel.set(100, -200);
-      us.canCollide = false;
+      us.solid && (us.solid.obstructs = false);
     }else if(this.state === STATE_PANIC){
       this.hide(us);
     }
@@ -136,6 +138,8 @@ function createKoopaFactory(sprite: SpriteSheet) {
     koopa.size.set(16, 16);
     koopa.offset.y = 8;
 
+    koopa.addTrait(new Physics());
+    koopa.addTrait(new Solid());
     koopa.addTrait(new PendulumMoove());
     koopa.addTrait(new Behavior());
     koopa.addTrait(new Killable());

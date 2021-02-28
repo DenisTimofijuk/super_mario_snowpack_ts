@@ -59,5 +59,5 @@ export class Jump extends Trait {
     this.requestTime = 0;
   }
 
-  collides(a:Entity, b:Entity){}
+  // collides(a:Entity, b:Entity){}
 }

@@ -8,7 +8,9 @@ import type { Go } from './traits/Go';
 import type { Jump } from './traits/Jump';
 import type { Killable } from './traits/Killable';
 import type { PendulumMoove } from './traits/PendulumMoove';
+import type { Physics } from './traits/Physics';
 import type { PlayerController } from './traits/PlayerController';
+import type { Solid } from './traits/Solid';
 import type { Stomper } from './traits/Stomper';
 
 export const Sides = {
@@ -23,7 +25,7 @@ export class Trait {
     this.tasks = [];
   }
 
-  obstruct(a: Entity, b: symbol){};
+  obstruct(a: Entity, b: symbol, c: GetByIndexResult){};
   update(a: Entity, b: number){};
   collides(a: Entity, b:Entity){};
 
@@ -37,24 +39,25 @@ export class Trait {
   }
 }
 
-export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour;
-type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour;
+export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics;
+type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour & Solid & Physics;
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
   traits: Array<TraitType>;
   jump?: Jump;
   go?: Go;
+  solid?:Solid;
   behavior?: GoombaBehaviour | KoopaBehaviour;
   pendulummoove?: PendulumMoove;
   stomper?: Stomper;
   killable? :Killable;
+  physics?:Physics;
   playercontroller?: PlayerController;
   size: Vec2;
   lifetime: number;
   offset: Vec2;
   bounds: BoundingBox;
-  canCollide: boolean;
   constructor() {
     this.pos = new Vec2(0, 0);
     this.vel = new Vec2(0, 0);
@@ -62,7 +65,6 @@ export default class Entity {
     this.offset = new Vec2(0, 0);
     this.bounds = new BoundingBox(this.pos, this.size, this.offset);
     this.lifetime = 0;
-    this.canCollide = true;
     
     this.traits = [];
   }
@@ -78,9 +80,9 @@ export default class Entity {
     });
   }
 
-  obstruct(side: symbol) {
+  obstruct(side: symbol, match:GetByIndexResult) {
     this.traits.forEach((trait) => {
-      trait.obstruct(this, side);
+      trait.obstruct(this, side, match);
     });
   }
 

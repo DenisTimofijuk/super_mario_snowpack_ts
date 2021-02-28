@@ -8,13 +8,16 @@ import { loadEntities } from './entities';
 import { createLevelLoader } from './vaLoaders/level';
 import Entity from './Entity';
 import { PlayerController } from './traits/PlayerController';
+import { Solid } from './traits/Solid';
 
 function createPlayerENviroment(playerEntity:Entity) {
   const playerEnv = new Entity();
   const playerControl = new PlayerController();
   playerControl.checkpoint.set(64, 64);
   playerControl.setPlayer(playerEntity);
+  playerEnv.addTrait(new Solid());
   playerEnv.addTrait(playerControl);
+
 
   return playerEnv;
 }

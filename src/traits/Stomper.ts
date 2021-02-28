@@ -21,8 +21,4 @@ export class Stomper extends Trait{
             this.bounce(us, them);
         }
     }
-
-    obstruct(){}
-
-    update(entity:Entity){}
 }

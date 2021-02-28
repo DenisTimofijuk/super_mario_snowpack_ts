@@ -29,7 +29,9 @@ export class Killable extends Trait{
         if(this.dead){
             this.deadTime += deltaTime;
             if(this.deadTime > this.removeAfter){
-                level && level.entities.delete(entity);
+                this.queue(() => {
+                    level && level.entities.delete(entity);    
+                })                
             }
         }
     }
