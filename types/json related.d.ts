@@ -15,8 +15,10 @@ type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe
 type ChanceSprites = 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
 type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
 
+type FontName = string;
+
 type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
-type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName;
+type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName | FontName;
 
 type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller' | 'solid' | 'physics';
 

@@ -5,10 +5,12 @@ import type Level from "../level";
 export class PlayerController extends Trait{
     player: Entity;
     checkpoint: Vec2;
+    time: number;
     constructor() {
         super('playercontroller');
         this.player = <any>{};
         this.checkpoint = new Vec2(0, 0);
+        this.time = 300;
     }
 
     setPlayer(entity:Entity){
@@ -22,8 +24,9 @@ export class PlayerController extends Trait{
         if(!level?.entities.has(this.player)){
             this.player.killable?.revive();
             this.player.pos.set(this.checkpoint.x, this.checkpoint.y);
-
             level?.entities.add(this.player);
+        }else{
+            this.time -= deltaTime * 2;
         }
     }
 }

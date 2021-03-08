@@ -3,12 +3,14 @@ import { setupMouseControl } from './debug';
 import { setupKeyboard } from './input';
 
 import Timer from './Timer';
-import { createCollisionLayer } from './layers';
 import { loadEntities } from './entities';
 import { createLevelLoader } from './vaLoaders/level';
 import Entity from './Entity';
 import { PlayerController } from './traits/PlayerController';
 import { Solid } from './traits/Solid';
+import { createCollisionLayer } from './app_layers/collision';
+import { loadFont } from './vaLoaders/font';
+import { createDashboardLayer } from './app_layers/dashboard';
 
 function createPlayerENviroment(playerEntity:Entity) {
   const playerEnv = new Entity();
@@ -26,7 +28,7 @@ function createPlayerENviroment(playerEntity:Entity) {
 async function main(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
 
-  const entityFactory = await loadEntities();
+  const [entityFactory, font] = await Promise.all([loadEntities(), loadFont()]);
   const loadLevel = createLevelLoader(entityFactory);
   const level = await loadLevel('1-1');
 
@@ -41,8 +43,10 @@ async function main(canvas: HTMLCanvasElement) {
   input.listenTo(window);
 
   // setupMouseControl(canvas, mario, camera);
-  const collisionLayer = createCollisionLayer(level);
-  collisionLayer && level.comp.layers.push(collisionLayer);
+  // const collisionLayer = createCollisionLayer(level);
+  // collisionLayer && level.comp.layers.push(collisionLayer);
+
+  level.comp.layers.push(createDashboardLayer(font, playerEnv));
 
   const timer = new Timer();
   timer.update = function update(deltaTime: number) {

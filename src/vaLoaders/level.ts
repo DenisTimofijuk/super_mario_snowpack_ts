@@ -1,9 +1,10 @@
 import { Matrix } from '../math';
-import { createBackgroundLayer, createSpriteLayer } from '../layers';
 import Level from '../level';
 import { loadJSON, loadSpriteSheet } from '../loaders';
-import type SpriteSheet from 'src/SpriteSheet';
-import type { EntityFactorie } from 'src/entities';
+import type SpriteSheet from '../SpriteSheet';
+import type { EntityFactorie } from '../entities';
+import { createBackgroundLayer } from '../app_layers/background';
+import { createSpriteLayer } from '../app_layers/sprites';
 
 function setupCollision(levelSpec: Level_JSON, level: Level) {
   const mergedTiles = levelSpec.layers.reduce((mergedTiles, layerSpec) => {
