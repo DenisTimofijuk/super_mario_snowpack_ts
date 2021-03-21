@@ -14,6 +14,7 @@ import type { PlayerController } from './traits/PlayerController';
 import type { Solid } from './traits/Solid';
 import type { Stomper } from './traits/Stomper';
 import type AudioBoard from './AudioBoard';
+import EventEmitter from './eventEmiter';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -24,9 +25,11 @@ export const Sides = {
 export class Trait {
   tasks: Function[];
   sounds: Set<AudioName>;
+  events: EventEmitter;
   constructor(public readonly NAME: TraitName) {
     this.tasks = [];
     this.sounds = new Set();
+    this.events = new EventEmitter();
   }
 
   obstruct(a: Entity, b: symbol, c: GetByIndexResult){};

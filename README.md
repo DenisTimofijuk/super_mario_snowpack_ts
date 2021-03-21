@@ -11,7 +11,7 @@ Original tutorial: [Super Mario Bros in JavaScript](https://www.youtube.com/play
 - [snowpack-plugin-webpack5](https://www.npmjs.com/package/snowpack-plugin-webpack5)
 
 ## Comments
-Currently I really not like how I managed traits adding with TypeScript. I would love to hear a better solutions for such case.  
+Currently I really don't like how I managed traits adding with TypeScript. I would love to hear a better solutions for such case.  
 
 ```
  type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics;
