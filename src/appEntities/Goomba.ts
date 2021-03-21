@@ -6,7 +6,7 @@ import { Killable } from '../traits/Killable';
 import { Solid } from '../traits/Solid';
 import { Physics } from '../traits/Physics';
 
-export function loadGoomba() {
+export function loadGoomba(audioContext:AudioContext) {
   return loadSpriteSheet('goomba').then(createGoombaFactory);
 }
 

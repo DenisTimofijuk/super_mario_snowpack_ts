@@ -1,3 +1,4 @@
+import type { GameContext } from './index';
 import type { Behavior as GoombaBehaviour } from './appEntities/Goomba';
 import type { Behavior as KoopaBehaviour } from './appEntities/Koopa';
 import BoundingBox from './boundingBox';
@@ -12,6 +13,7 @@ import type { Physics } from './traits/Physics';
 import type { PlayerController } from './traits/PlayerController';
 import type { Solid } from './traits/Solid';
 import type { Stomper } from './traits/Stomper';
+import type AudioBoard from './AudioBoard';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -21,16 +23,25 @@ export const Sides = {
 };
 export class Trait {
   tasks: Function[];
+  sounds: Set<AudioName>;
   constructor(public readonly NAME: TraitName) {
     this.tasks = [];
+    this.sounds = new Set();
   }
 
   obstruct(a: Entity, b: symbol, c: GetByIndexResult){};
-  update(a: Entity, b: number){};
+  update(a:GameContext, b: Entity, c: Level){};
   collides(a: Entity, b:Entity){};
 
   queue(task:Function){
     this.tasks.push(task);
+  }
+
+  playSounds(audioBoard:AudioBoard, context:AudioContext){
+    this.sounds.forEach(name => {
+      audioBoard.playAudio(name, context);
+    });
+    this.sounds.clear();
   }
 
   finalize(){
@@ -58,7 +69,9 @@ export default class Entity {
   lifetime: number;
   offset: Vec2;
   bounds: BoundingBox;
+  audio: AudioBoard;
   constructor() {
+    this.audio = <any>{};
     this.pos = new Vec2(0, 0);
     this.vel = new Vec2(0, 0);
     this.size = new Vec2(0, 0);
@@ -86,12 +99,13 @@ export default class Entity {
     });
   }
 
-  update(deltatime: number, level:Level) {
+  update(gameContext:GameContext, level:Level) {
     this.traits.forEach((trait) => {
-      trait.update(this, deltatime, level);
+      trait.update(gameContext, this, level);
+      trait.playSounds(this.audio, gameContext.audioContext);
     });
 
-    this.lifetime += deltatime;
+    this.lifetime += gameContext.deltaTime!;
   }
 
   draw(a: CanvasRenderingContext2D) {}

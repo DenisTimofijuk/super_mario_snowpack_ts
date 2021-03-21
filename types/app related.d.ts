@@ -10,4 +10,3 @@ type GetByIndexResult = {
   x1: number;
   x2: number;
 };
-

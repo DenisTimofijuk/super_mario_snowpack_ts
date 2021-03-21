@@ -1,6 +1,7 @@
 import { Vec2 } from "../math";
 import Entity, { Trait } from "../Entity";
 import type Level from "../level";
+import type { GameContext } from "../index";
 
 export class PlayerController extends Trait{
     player: Entity;
@@ -27,13 +28,13 @@ export class PlayerController extends Trait{
     collides(){}
     obstruct(){}
 
-    update(entity:Entity, deltaTime:number, level?:Level){
+    update(gameContext:GameContext, entity:Entity, level?:Level){
         if(!level?.entities.has(this.player)){
             this.player.killable?.revive();
             this.player.pos.set(this.checkpoint.x, this.checkpoint.y);
             level?.entities.add(this.player);
         }else{
-            this.time -= deltaTime * 2;
+            this.time -= gameContext.deltaTime! * 2;
         }
     }
 }

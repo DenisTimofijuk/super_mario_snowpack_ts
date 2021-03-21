@@ -1,3 +1,5 @@
+import type { GameContext } from '../index';
+import type Level from 'src/level';
 import Entity, { Sides, Trait } from '../Entity';
 
 export class Jump extends Trait {
@@ -19,13 +21,15 @@ export class Jump extends Trait {
     this.speedBoost = 0.3;
   }
 
-  update(entity: Entity, deltaTime: number) {
+  update(gameContext:GameContext, entity: Entity, level:Level) {
     if (this.requestTime > 0) {
       if (this.ready > 0) {
+        // entity.audio.playAudio('jump', gameContext.audioContext);
+        this.sounds.add('jump');
         this.engageTime = this.duration;
         this.requestTime = 0;
       }
-      this.requestTime -= deltaTime;
+      this.requestTime -= gameContext.deltaTime!;
     }
 
     if (this.engageTime > 0) {
@@ -33,7 +37,7 @@ export class Jump extends Trait {
         this.velocity +
         Math.abs(entity.vel.x) * this.speedBoost
       );
-      this.engageTime -= deltaTime;
+      this.engageTime -= gameContext.deltaTime!;
     }
     this.ready--;
   }

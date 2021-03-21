@@ -1,3 +1,4 @@
+import type { GameContext } from './index';
 import Compositor from './Compositor';
 import type Entity from './Entity';
 import { EntityCollider } from './EntityCollider';
@@ -24,13 +25,13 @@ export default class Level {
     this.tileCollider = new TileCollider(matrix);
   }
 
-  update(deltaTime: number) {
+  update(gameContext: GameContext) {
     if (this.tileCollider === null) {
       return;
     }
 
     this.entities.forEach((entity) => {
-      entity.update(deltaTime, this);
+      entity.update(gameContext, this);
     });
 
     this.entities.forEach((entity) => {
@@ -39,6 +40,6 @@ export default class Level {
 
     this.entities.forEach(entity => entity.finalize())
 
-    this.totalTime += deltaTime;
+    this.totalTime += gameContext.deltaTime!;
   }
 }

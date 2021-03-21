@@ -5,8 +5,9 @@ import { PendulumMoove } from '../traits/PendulumMoove';
 import { Killable } from '../traits/Killable';
 import { Solid } from '../traits/Solid';
 import { Physics } from '../traits/Physics';
+import type { GameContext } from '../index';
 
-export function loadKoopa() {
+export function loadKoopa(audioContext:AudioContext) {
   return loadSpriteSheet('koopa').then(createKoopaFactory);
 }
 
@@ -92,9 +93,9 @@ export class Behavior extends Trait {
 
   obstruct() {}
 
-  update(us: Entity, deltaTime: number) {
+  update(gameContext:GameContext, us: Entity) {
     if (this.state === STATE_HIDING) {
-      this.hideTime += deltaTime;
+      this.hideTime += gameContext.deltaTime!;
       if (this.hideTime > this.hideDuration) {
         this.unhide(us);
       }

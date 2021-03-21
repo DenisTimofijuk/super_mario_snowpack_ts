@@ -1,3 +1,4 @@
+import type { GameContext } from "src";
 import type Level from "src/level";
 import Entity, { Trait } from "../Entity";
 
@@ -25,9 +26,9 @@ export class Killable extends Trait{
 
     obstruct(){}
 
-    update(entity: Entity, deltaTime:number, level?:Level){
+    update(gameContext:GameContext, entity: Entity, level:Level){
         if(this.dead){
-            this.deadTime += deltaTime;
+            this.deadTime += gameContext.deltaTime!;
             if(this.deadTime > this.removeAfter){
                 this.queue(() => {
                     level && level.entities.delete(entity);    

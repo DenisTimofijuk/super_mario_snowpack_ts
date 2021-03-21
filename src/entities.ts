@@ -7,7 +7,7 @@ export type EntityFactorie = {
   [key in EntityName]: () => Entity
 }
 
-export function loadEntities() {
+export function loadEntities(audioContext: AudioContext) {
   const entityFactories:EntityFactorie = <any>{};
 
   function addAs(name:EntityName) {
@@ -15,8 +15,8 @@ export function loadEntities() {
   }
 
   return Promise.all([
-    loadMario().then(addAs('mario')),
-    loadGoomba().then(addAs('goomba')), 
-    loadKoopa().then(addAs('koopa')),
+    loadMario(audioContext).then(addAs('mario')),
+    loadGoomba(audioContext).then(addAs('goomba')), 
+    loadKoopa(audioContext).then(addAs('koopa')),
   ]).then(() => entityFactories);  
 }

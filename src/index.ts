@@ -1,7 +1,6 @@
 import Camera from './Camera';
 import { setupMouseControl } from './debug';
 import { setupKeyboard } from './input';
-
 import Timer from './Timer';
 import { loadEntities } from './entities';
 import { createLevelLoader } from './vaLoaders/level';
@@ -11,8 +10,9 @@ import { Solid } from './traits/Solid';
 import { createCollisionLayer } from './app_layers/collision';
 import { loadFont } from './vaLoaders/font';
 import { createDashboardLayer } from './app_layers/dashboard';
+import { createAudioLoader } from './vaLoaders/audio';
 
-function createPlayerENviroment(playerEntity:Entity) {
+function createPlayerENviroment(playerEntity: Entity) {
   const playerEnv = new Entity();
   const playerControl = new PlayerController();
   playerControl.checkpoint.set(64, 64);
@@ -20,15 +20,18 @@ function createPlayerENviroment(playerEntity:Entity) {
   playerEnv.addTrait(new Solid());
   playerEnv.addTrait(playerControl);
 
-
   return playerEnv;
 }
-
+export interface GameContext {
+  audioContext: AudioContext;
+  deltaTime: number | null;
+}
 
 async function main(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
+  const audioContext = new AudioContext();
+  const [entityFactory, font] = await Promise.all([loadEntities(audioContext), loadFont()]);
 
-  const [entityFactory, font] = await Promise.all([loadEntities(), loadFont()]);
   const loadLevel = createLevelLoader(entityFactory);
   const level = await loadLevel('1-1');
 
@@ -47,10 +50,14 @@ async function main(canvas: HTMLCanvasElement) {
   // collisionLayer && level.comp.layers.push(collisionLayer);
 
   level.comp.layers.push(createDashboardLayer(font, playerEnv));
-
+  const gameContext: GameContext = {
+    audioContext,
+    deltaTime: null,
+  };
   const timer = new Timer();
   timer.update = function update(deltaTime: number) {
-    level.update(deltaTime);
+    gameContext.deltaTime = deltaTime;
+    level.update(gameContext);
     camera.pos.x = Math.max(0, mario.pos.x - 100);
     level.comp.draw(ctx, camera);
   };

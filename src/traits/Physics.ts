@@ -1,3 +1,4 @@
+import type { GameContext } from '../index';
 import Entity, { Trait } from '../Entity';
 import type Level from '../level';
 
@@ -6,13 +7,13 @@ export class Physics extends Trait {
     super('physics');
   }
 
-  update(entity: Entity, deltaTime: number, level?: Level) {
-    entity.pos.x += entity.vel.x * deltaTime;
+  update(gameContext:GameContext, entity: Entity, level?: Level) {
+    entity.pos.x += entity.vel.x * gameContext.deltaTime!;
     level && level.tileCollider!.checkX(entity);
 
-    entity.pos.y += entity.vel.y * deltaTime;
+    entity.pos.y += entity.vel.y * gameContext.deltaTime!;
     level && level.tileCollider!.checkY(entity);
 
-    level && (entity.vel.y += level.gravity * deltaTime);
+    level && (entity.vel.y += level.gravity * gameContext.deltaTime!);
   }
 }

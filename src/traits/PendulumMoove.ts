@@ -1,3 +1,4 @@
+import type { GameContext } from '../index';
 import Entity, { Sides, Trait } from '../Entity';
 
 export class PendulumMoove extends Trait {
@@ -9,7 +10,7 @@ export class PendulumMoove extends Trait {
     this.speed = -30;
   }
 
-  update(entity: Entity, deltaTime: number) {
+  update(gameContext:GameContext, entity: Entity) {
     if(this.enabled){
       entity.vel.x = this.speed;
     }    

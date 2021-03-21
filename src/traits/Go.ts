@@ -1,3 +1,4 @@
+import type { GameContext } from '../index';
 import Entity, { Trait } from '../Entity';
 
 export class Go extends Trait {
@@ -21,10 +22,10 @@ export class Go extends Trait {
 
   collides(a:Entity, b:Entity){};
 
-  update(entity: Entity, deltaTime: number) {
+  update(gameContext:GameContext, entity: Entity) {
     const absX = Math.abs(entity.vel.x);
     if (this.dir !== 0) {
-      entity.vel.x += this.acceleration * deltaTime * this.dir;
+      entity.vel.x += this.acceleration * gameContext.deltaTime! * this.dir;
       if (entity.jump) {
         if (entity.jump.falling === false) {
           this.heading = this.dir;
@@ -33,7 +34,7 @@ export class Go extends Trait {
         this.heading = this.dir;
       }
     } else if (entity.vel.x !== 0) {
-      const decel = Math.min(absX, this.deseleration * deltaTime);
+      const decel = Math.min(absX, this.deseleration * gameContext.deltaTime!);
       entity.vel.x += entity.vel.x > 0 ? -decel : decel;
     } else {
       this.distance = 0;
@@ -41,6 +42,6 @@ export class Go extends Trait {
 
     const drag = this.dragFactor * entity.vel.x * absX;
     entity.vel.x -= drag;
-    this.distance += absX * deltaTime;
+    this.distance += absX * gameContext.deltaTime!;
   }
 }
