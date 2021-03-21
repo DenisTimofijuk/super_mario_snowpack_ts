@@ -1,29 +1,11 @@
-# New Project
+# Super Mario game
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
+This is a weel know Super Mario game recreated with TypeScript.  
+  
+Original tutorial: [Super Mario Bros in JavaScript](https://www.youtube.com/playlist?list=PLS8HfBXv9ZWWe8zXrViYbIM2Hhylx8DZx)
 
-## Available Scripts
 
-### npm start
+## Using Snowpack
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
-
-The page will reload if you make edits.
-You will also see any lint errors in the console.
-
-### npm run build
-
-Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
-
-**For the best production performance:** Add a build bundler plugin like [@snowpack/plugin-webpack](https://github.com/snowpackjs/snowpack/tree/main/plugins/plugin-webpack) or [snowpack-plugin-rollup-bundle](https://github.com/ParamagicDev/snowpack-plugin-rollup-bundle) to your `snowpack.config.json` config file.
-
-### Q: What about Eject?
-
-No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
-
-# Notes
-
-[Simulate dellays](https://youtu.be/FF93S8rLL_Q?t=184)  
-
+- [Templates](https://github.com/snowpackjs/snowpack/tree/main/create-snowpack-app/cli)
+- [snowpack-plugin-webpack5](https://www.npmjs.com/package/snowpack-plugin-webpack5)
