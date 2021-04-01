@@ -1,6 +1,6 @@
-type SoundsJSONfileName = 'mario';
+type SoundsJSONfileName = 'mario' | 'bullet';
 
-type AudioName = 'jump' | 'stomp';
+type AudioName = 'jump' | 'stomp' | 'shoot';
 
 type SoundContent = {
     url:string;

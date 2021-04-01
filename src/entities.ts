@@ -1,3 +1,5 @@
+import { loadBullet } from "./appEntities/Bullet";
+import { loadCanon } from "./appEntities/Canon";
 import { loadGoomba } from "./appEntities/Goomba";
 import { loadKoopa } from "./appEntities/Koopa";
 import { loadMario } from "./appEntities/mario";
@@ -18,5 +20,7 @@ export function loadEntities(audioContext: AudioContext) {
     loadMario(audioContext).then(addAs('mario')),
     loadGoomba(audioContext).then(addAs('goomba')), 
     loadKoopa(audioContext).then(addAs('koopa')),
+    loadBullet(audioContext).then(addAs('bullet')),
+    loadCanon(audioContext, entityFactories).then(addAs('cannon'))
   ]).then(() => entityFactories);  
 }

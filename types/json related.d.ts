@@ -1,7 +1,7 @@
-type EntityName = 'mario' | 'koopa' | 'goomba';
+type EntityName = 'mario' | 'koopa' | 'goomba' | 'bullet' | 'cannon';
 
 type Level_JSON_file_name = '1-1';
-type Sprite_JSON_file_name = 'overworld' | 'underworld' | EntityName;
+type Sprite_JSON_file_name = 'overworld' | 'underworld' | EntityName | 'bullet-bill';
 type TyleType = 'ground' | 'sky';
 
 type MarioFrameName = "idle" | "run" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
@@ -9,18 +9,18 @@ type EnemiesFrameName = "flat" | "walk" | "walk-1" | "walk-2" | "hiding" | "hidi
 
 type CloudSprites = "cloud-1-1" | "cloud-1-2" | "cloud-1-3" | "cloud-2-1" | "cloud-2-2" | "cloud-2-3";
 
+type Cannon = 'cannon-1' | 'cannon-2' | 'cannon-3' | 'bullet';
+
 type PypeSprites = "pipe-insert-vert-left" | "pipe-insert-vert-right" | "pipe-vert-left" | "pipe-vert-right";
-type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe-3h' | 'pipe-4h' | 'cloud-single';
+type PatternPipeKeys = 'pipe-section-vert' | 'pipe-cap-vert' | 'pipe-2h' | 'pipe-3h' | 'pipe-4h' | 'cloud-single' | 'cannon-2h';
 
 type ChanceSprites = 'chance' | 'chance-1' | 'chance-2' | 'chance-3';
 type BackgroundSprites = 'ground' | 'sky' | 'chocolate' | 'bricks';
 
-type FontName = string;
+type FontName = '!'|'"'|'#'|'$'|'%'|'&'|'\''|'('|')'|'*'|'+'|','|'-'|'.'|'/'|'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|':'|';'|'<'|'='|'>'|'?'|'@'|'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'['|'\\'|']'|'^'|'_'|'`'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|'{'|'|'|'}'|'~';
 
-type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites;
+type BackgroundSpriteName = BackgroundSprites | CloudSprites | PypeSprites | ChanceSprites | Cannon;
 type SpriteSheetName = BackgroundSpriteName | MarioFrameName | EnemiesFrameName | FontName;
-
-type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller' | 'solid' | 'physics';
 
 type BackgroundTile = {
   name: SpriteSheetName;

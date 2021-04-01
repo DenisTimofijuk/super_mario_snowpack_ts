@@ -15,6 +15,10 @@ import type { Solid } from './traits/Solid';
 import type { Stomper } from './traits/Stomper';
 import type AudioBoard from './AudioBoard';
 import EventEmitter from './eventEmiter';
+import type { Velocity } from './traits/Velocity';
+import type { Gravity } from './traits/Gravity';
+import type { Emitter } from './traits/Emitter';
+import type { Player } from './traits/player';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -24,11 +28,9 @@ export const Sides = {
 };
 export class Trait {
   tasks: Function[];
-  sounds: Set<AudioName>;
   events: EventEmitter;
   constructor(public readonly NAME: TraitName) {
     this.tasks = [];
-    this.sounds = new Set();
     this.events = new EventEmitter();
   }
 
@@ -40,21 +42,14 @@ export class Trait {
     this.tasks.push(task);
   }
 
-  playSounds(audioBoard:AudioBoard, context:AudioContext){
-    this.sounds.forEach(name => {
-      audioBoard.playAudio(name, context);
-    });
-    this.sounds.clear();
-  }
-
   finalize(){
     this.tasks.forEach(task => task());
     this.tasks.length = 0;
   }
 }
 
-export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics;
-type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour & Solid & Physics;
+export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics | Velocity | Gravity | Emitter | Player;
+type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour & Solid & Physics & Velocity & Gravity & Emitter & Player;
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
@@ -73,6 +68,11 @@ export default class Entity {
   offset: Vec2;
   bounds: BoundingBox;
   audio: AudioBoard;
+  velocity?: Velocity;
+  gravity?:Gravity;
+  emitter?: Emitter;
+  sounds: Set<AudioName>;
+  player?: Player;
   constructor() {
     this.audio = <any>{};
     this.pos = new Vec2(0, 0);
@@ -81,8 +81,16 @@ export default class Entity {
     this.offset = new Vec2(0, 0);
     this.bounds = new BoundingBox(this.pos, this.size, this.offset);
     this.lifetime = 0;
+    this.sounds = new Set();
     
     this.traits = [];
+  }
+
+  playSounds(audioBoard:AudioBoard, context:AudioContext){
+    this.sounds.forEach(name => {
+      audioBoard.playAudio(name, context);
+    });
+    this.sounds.clear();
   }
 
   addTrait(trait: TraitType) {
@@ -104,9 +112,10 @@ export default class Entity {
 
   update(gameContext:GameContext, level:Level) {
     this.traits.forEach((trait) => {
-      trait.update(gameContext, this, level);
-      trait.playSounds(this.audio, gameContext.audioContext);
+      trait.update(gameContext, this, level);  
     });
+    
+    this.playSounds(this.audio, gameContext.audioContext);
 
     this.lifetime += gameContext.deltaTime!;
   }

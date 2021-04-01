@@ -11,17 +11,8 @@ import { createCollisionLayer } from './app_layers/collision';
 import { loadFont } from './vaLoaders/font';
 import { createDashboardLayer } from './app_layers/dashboard';
 import { createAudioLoader } from './vaLoaders/audio';
+import { createPlayer, createPlayerENviroment } from './player';
 
-function createPlayerENviroment(playerEntity: Entity) {
-  const playerEnv = new Entity();
-  const playerControl = new PlayerController();
-  playerControl.checkpoint.set(64, 64);
-  playerControl.setPlayer(playerEntity);
-  playerEnv.addTrait(new Solid());
-  playerEnv.addTrait(playerControl);
-
-  return playerEnv;
-}
 export interface GameContext {
   audioContext: AudioContext;
   deltaTime: number | null;
@@ -37,7 +28,7 @@ async function main(canvas: HTMLCanvasElement) {
 
   const camera = new Camera();
 
-  const mario = entityFactory.mario();
+  const mario = createPlayer(entityFactory.mario());
 
   const playerEnv = createPlayerENviroment(mario);
   level.entities.add(playerEnv);
