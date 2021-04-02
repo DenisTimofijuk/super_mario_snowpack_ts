@@ -1,10 +1,14 @@
-type GridElement = {
-  name?: SpriteSheetName;
-  type?: TyleType | undefined;
-};
+// type GridElement = {
+//   name?: SpriteSheetName;
+//   type?: TyleType | undefined;
+// };
+
+type GridElement = BackgroundTile | BackgroundPattern | PatternBackground;
 
 type GetByIndexResult = {
   tile: GridElement;
+  index_x:number;
+  index_y:number;
   y1: number;
   y2: number;
   x1: number;

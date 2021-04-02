@@ -232,7 +232,7 @@
         {
             "tiles": [{
                     "name": "bricks",
-                    "type": "ground",
+                    "type": "brick",
                     "ranges": [
                         [
                             27, 5,

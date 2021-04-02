@@ -2,7 +2,7 @@ type EntityName = 'mario' | 'koopa' | 'goomba' | 'bullet' | 'cannon';
 
 type Level_JSON_file_name = '1-1';
 type Sprite_JSON_file_name = 'overworld' | 'underworld' | EntityName | 'bullet-bill';
-type TyleType = 'ground' | 'sky';
+type TyleType = 'ground' | 'sky' | 'brick';
 
 type MarioFrameName = "idle" | "run" | "run-1"  | "run-2" | "run-3" | "break" | "jump";
 type EnemiesFrameName = "flat" | "walk" | "walk-1" | "walk-2" | "hiding" | "hiding-with-legs" | "wake";

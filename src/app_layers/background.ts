@@ -17,6 +17,7 @@ export function createBackgroundLayer(level: Level, tiles:Matrix, sprites: Sprit
         const col = tiles.grid[x];
         if(col){
           col.forEach((tile, y) => {
+            if("name" in tile)
             if(sprites.animation.has(tile.name!)){
               sprites.drawAnim(tile.name!, context, x - startIndex, y, level.totalTime);
             }else{

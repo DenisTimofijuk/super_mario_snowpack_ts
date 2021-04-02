@@ -2,7 +2,7 @@ import Camera from './Camera';
 import { setupMouseControl } from './debug';
 import { setupKeyboard } from './input';
 import Timer from './Timer';
-import { loadEntities } from './entities';
+import { EntityFactorie, loadEntities } from './entities';
 import { createLevelLoader } from './vaLoaders/level';
 import Entity from './Entity';
 import { PlayerController } from './traits/PlayerController';
@@ -15,6 +15,7 @@ import { createPlayer, createPlayerENviroment } from './player';
 
 export interface GameContext {
   audioContext: AudioContext;
+  entityFactory: EntityFactorie;
   deltaTime: number | null;
 }
 
@@ -37,12 +38,13 @@ async function main(canvas: HTMLCanvasElement) {
   input.listenTo(window);
 
   // setupMouseControl(canvas, mario, camera);
-  // const collisionLayer = createCollisionLayer(level);
-  // collisionLayer && level.comp.layers.push(collisionLayer);
+  const collisionLayer = createCollisionLayer(level);
+  collisionLayer && level.comp.layers.push(collisionLayer);
 
   level.comp.layers.push(createDashboardLayer(font, playerEnv));
   const gameContext: GameContext = {
     audioContext,
+    entityFactory,
     deltaTime: null,
   };
   const timer = new Timer();

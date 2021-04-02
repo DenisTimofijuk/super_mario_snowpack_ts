@@ -10,7 +10,7 @@ export default class Level {
   entities: Set<Entity>;
   gravity: number;
   totalTime: number;
-  tileCollider: TileCollider | null;
+  tileCollider: TileCollider;
   entityCollider: EntityCollider;
   constructor() {
     this.gravity = 1500;
@@ -18,11 +18,7 @@ export default class Level {
     this.comp = new Compositor();
     this.entities = new Set();
     this.entityCollider = new EntityCollider(this.entities)
-    this.tileCollider = null;
-  }
-
-  setCollisionGrid(matrix: Matrix) {
-    this.tileCollider = new TileCollider(matrix);
+    this.tileCollider = new TileCollider();
   }
 
   update(gameContext: GameContext) {

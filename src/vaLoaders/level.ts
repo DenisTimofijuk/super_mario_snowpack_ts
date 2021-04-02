@@ -6,32 +6,24 @@ import type { EntityFactorie } from '../entities';
 import { createBackgroundLayer } from '../app_layers/background';
 import { createSpriteLayer } from '../app_layers/sprites';
 
-function setupCollision(levelSpec: Level_JSON, level: Level) {
-  const mergedTiles = levelSpec.layers.reduce((mergedTiles, layerSpec) => {
-    return mergedTiles.concat(layerSpec.tiles);
-  }, <(BackgroundTile & BackgroundPattern)[]>[]);
-
-  const collisionGrid = createCollisionGrid(mergedTiles, levelSpec.patterns);
-  level.setCollisionGrid(collisionGrid);
-}
-
 function setupBackground(
   levelSpec: Level_JSON,
   level: Level,
   backgroundsprites: SpriteSheet,
 ) {
   levelSpec.layers.forEach((layer) => {
-    const backgroundGrid = createBackgroundGrid(
+    const grid = createGrid(
       layer.tiles,
       levelSpec.patterns,
     );
     if (backgroundsprites) {
       const backgroundLayer = createBackgroundLayer(
         level,
-        backgroundGrid,
+        grid,
         backgroundsprites,
       );
       level.comp.layers.push(backgroundLayer);
+      level.tileCollider.addGrid(grid);
     }
   });
 }
@@ -62,7 +54,6 @@ export function createLevelLoader(entityFactory: EntityFactorie) {
       .then(([levelSpec, backgroundsprites]) => {
         const level = new Level();
 
-        setupCollision(levelSpec, level);
         setupBackground(levelSpec, level, backgroundsprites);
         setupEntities(levelSpec, level, entityFactory);
 
@@ -71,33 +62,13 @@ export function createLevelLoader(entityFactory: EntityFactorie) {
   };
 }
 
-function createCollisionGrid(
+function createGrid(
   tiles: (BackgroundTile & BackgroundPattern)[],
   patterns: LevelPatterns,
 ) {
   const grid = new Matrix();
   for (const { tile, x, y } of expandTiles(tiles, patterns)) {
-    let type;
-    if ('type' in tile) {
-      type = tile.type;
-    }
-    grid.set(x, y, { type: type });
-  }
-
-  return grid;
-}
-
-function createBackgroundGrid(
-  tiles: (BackgroundTile & BackgroundPattern)[],
-  patterns: LevelPatterns,
-) {
-  const grid = new Matrix();
-  for (const { tile, x, y } of expandTiles(tiles, patterns)) {
-    let name;
-    if ('name' in tile) {
-      name = tile.name;
-    }
-    grid.set(x, y, { name: name });
+    grid.set(x, y, tile);
   }
 
   return grid;

@@ -13,6 +13,13 @@ export class Matrix {
     })
   }
 
+  delete(x:number, y:number){
+    const col = this.grid[x];
+    if(col){
+      delete col[y];
+    }
+  }
+
   set(x:number, y:number, value:GridElement){
     if(!this.grid[x] ){
       this.grid[x] = [];

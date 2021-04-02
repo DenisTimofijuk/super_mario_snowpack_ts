@@ -1,6 +1,6 @@
 import type { Matrix } from "./math";
 export default class TileResolver {
-    constructor(private matrix:Matrix, public tileSize = 16) {
+    constructor(public matrix:Matrix, public tileSize = 16) {
         
     }
 
@@ -30,6 +30,8 @@ export default class TileResolver {
             const x2 = x1 + this.tileSize;
             return {
                 tile,
+                index_x,
+                index_y,
                 y1,
                 y2,
                 x1,
