@@ -1,10 +1,12 @@
 import { Matrix } from '../math';
 import Level from '../level';
-import { loadJSON, loadSpriteSheet } from '../loaders';
+import { loadJSON } from '../loaders';
 import type SpriteSheet from '../SpriteSheet';
 import type { EntityFactorie } from '../entities';
 import { createBackgroundLayer } from '../app_layers/background';
 import { createSpriteLayer } from '../app_layers/sprites';
+import { loadMusicSheet } from './music';
+import { loadSpriteSheet } from './sprite';
 
 function setupBackground(
   levelSpec: Level_JSON,
@@ -49,11 +51,15 @@ export function createLevelLoader(entityFactory: EntityFactorie) {
   return function loadLevel(name: Level_JSON_file_name) {
     return loadJSON<Level_JSON>(`./levels/${name}.json`)
       .then((levelSpec) =>
-        Promise.all([levelSpec, loadSpriteSheet(levelSpec.spriteSheet)]),
+        Promise.all([
+          levelSpec, 
+          loadSpriteSheet(levelSpec.spriteSheet),
+          loadMusicSheet(levelSpec.musicSheet)
+        ]),
       )
-      .then(([levelSpec, backgroundsprites]) => {
+      .then(([levelSpec, backgroundsprites, musicPlayer]) => {
         const level = new Level();
-
+        level.music.setPlayer(musicPlayer);
         setupBackground(levelSpec, level, backgroundsprites);
         setupEntities(levelSpec, level, entityFactory);
 

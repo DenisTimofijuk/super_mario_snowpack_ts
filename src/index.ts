@@ -55,6 +55,7 @@ async function main(canvas: HTMLCanvasElement) {
     level.comp.draw(ctx, camera);
   };
   timer.start();
+  level.music.player.playTrack('main');
 }
 
 const canvas = document.getElementById('screen') as HTMLCanvasElement;

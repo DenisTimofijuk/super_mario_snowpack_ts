@@ -2,8 +2,8 @@ import type { GameContext } from './index';
 import Compositor from './Compositor';
 import type Entity from './Entity';
 import { EntityCollider } from './EntityCollider';
-import type { Matrix } from './math';
 import TileCollider from './TileCollider';
+import MusicController from './MusicController';
 
 export default class Level {
   comp: Compositor;
@@ -12,6 +12,7 @@ export default class Level {
   totalTime: number;
   tileCollider: TileCollider;
   entityCollider: EntityCollider;
+  music: MusicController;
   constructor() {
     this.gravity = 1500;
     this.totalTime = 0;
@@ -19,6 +20,7 @@ export default class Level {
     this.entities = new Set();
     this.entityCollider = new EntityCollider(this.entities)
     this.tileCollider = new TileCollider();
+    this.music = new MusicController();
   }
 
   update(gameContext: GameContext) {

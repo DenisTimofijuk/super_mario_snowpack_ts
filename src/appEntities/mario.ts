@@ -1,7 +1,6 @@
 import type SpriteSheet from '../SpriteSheet';
 import Entity from '../Entity';
 import type { KeyState } from '../keyboardState';
-import { loadSpriteSheet } from '../loaders';
 import { Go } from '../traits/Go';
 import { Jump } from '../traits/Jump';
 import { Stomper } from '../traits/Stomper';
@@ -10,6 +9,7 @@ import { Solid } from '../traits/Solid';
 import { Physics } from '../traits/Physics';
 import { loadAudioBoard } from '../vaLoaders/audio';
 import type AudioBoard from '../AudioBoard';
+import { loadSpriteSheet } from '../vaLoaders/sprite';
 
 const SLOW_DRAG = 1 / 1000;
 const FAST_DRAG = 1 / 5000;

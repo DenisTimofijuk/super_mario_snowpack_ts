@@ -1,10 +1,10 @@
 import Entity, { Trait } from '../Entity';
 import type SpriteSheet from '../SpriteSheet';
-import { loadSpriteSheet } from '../loaders';
 import { PendulumMoove } from '../traits/PendulumMoove';
 import { Killable } from '../traits/Killable';
 import { Solid } from '../traits/Solid';
 import { Physics } from '../traits/Physics';
+import { loadSpriteSheet } from '../vaLoaders/sprite';
 
 export function loadGoomba(audioContext:AudioContext) {
   return loadSpriteSheet('goomba').then(createGoombaFactory);

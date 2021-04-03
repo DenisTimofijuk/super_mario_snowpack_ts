@@ -52,6 +52,7 @@ type Level_entities = {
 
 type Level_JSON = {
   spriteSheet: Sprite_JSON_file_name;
+  musicSheet:MusicJSONfileName;
   layers:[{
     tiles: (BackgroundTile & BackgroundPattern)[];
   }];  
@@ -94,5 +95,5 @@ interface Mario_JSON extends Entity_JSON {}
 interface Goomba_JSON extends Entity_JSON {}
 interface Koopa_JSON extends Entity_JSON {}
 
-type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON | Goomba_JSON | Koopa_JSON | MarioSoundsJSON;
+type JSON_object = Level_JSON | Overworld_JSON | Underworld_JSON | Mario_JSON | Goomba_JSON | Koopa_JSON | MarioSoundsJSON | OverworldMusicJSON;
 

@@ -1,11 +1,11 @@
 import Entity, { Trait } from '../Entity';
 import type SpriteSheet from '../SpriteSheet';
-import { loadSpriteSheet } from '../loaders';
 import { Killable } from '../traits/Killable';
 import { Velocity } from '../traits/Velocity';
-import type { GameContext } from 'src';
 import type Level from '../level';
 import { Gravity } from '../traits/Gravity';
+import { loadSpriteSheet } from '../vaLoaders/sprite';
+import type { GameContext } from '../index';
 
 export function loadBullet(audioContext:AudioContext) {
   return loadSpriteSheet('bullet-bill').then(createGoombaFactory);
