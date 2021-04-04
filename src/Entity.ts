@@ -19,6 +19,7 @@ import type { Velocity } from './traits/Velocity';
 import type { Gravity } from './traits/Gravity';
 import type { Emitter } from './traits/Emitter';
 import type { Player } from './traits/player';
+import EventBuffer from './EventBuffer';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -27,24 +28,31 @@ export const Sides = {
   RIGHT: Symbol('ryght')
 };
 export class Trait {
-  tasks: Function[];
-  events: EventEmitter;
+  static EVENT_TASK = Symbol('task');
+
+  listeners: Array<{name:Symbol, callback:()=>void, count:number}>;
   constructor(public readonly NAME: TraitName) {
-    this.tasks = [];
-    this.events = new EventEmitter();
+    this.listeners = [];
+  }
+
+  listen(name:Symbol, callback:()=>void, count = Infinity){
+    const listener = {name, callback, count};
+    this.listeners.push(listener);
   }
 
   obstruct(a: Entity, b: symbol, c: GetByIndexResult){};
   update(a:GameContext, b: Entity, c: Level){};
   collides(a: Entity, b:Entity){};
 
-  queue(task:Function){
-    this.tasks.push(task);
+  queue(task:()=>void){
+    this.listen(Trait.EVENT_TASK, task, 1);
   }
 
-  finalize(){
-    this.tasks.forEach(task => task());
-    this.tasks.length = 0;
+  finalize(entity:Entity){
+    this.listeners = this.listeners.filter(listener => {
+      entity.events.process(listener.name, listener.callback);
+      return --listener.count;
+    });
   }
 }
 
@@ -73,6 +81,7 @@ export default class Entity {
   emitter?: Emitter;
   sounds: Set<AudioName>;
   player?: Player;
+  events: EventBuffer;
   constructor() {
     this.audio = <any>{};
     this.pos = new Vec2(0, 0);
@@ -82,6 +91,7 @@ export default class Entity {
     this.bounds = new BoundingBox(this.pos, this.size, this.offset);
     this.lifetime = 0;
     this.sounds = new Set();
+    this.events = new EventBuffer();
     
     this.traits = [];
   }
@@ -125,7 +135,9 @@ export default class Entity {
   turbo(a: KeyState) {}
 
   finalize(){
-    this.traits.forEach(trait => trait.finalize());
+    this.events.emit(Trait.EVENT_TASK);
+    this.traits.forEach(trait => trait.finalize(this));
+    this.events.clear();
   }
 }
 

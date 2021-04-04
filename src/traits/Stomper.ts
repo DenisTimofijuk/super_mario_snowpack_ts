@@ -1,6 +1,8 @@
 import Entity, { Trait } from "../Entity";
 
 export class Stomper extends Trait{
+    static EVENT_STOMP = Symbol('stomp');
+
     bounceSpeed: number;
     constructor() {
         super('stomper');
@@ -20,7 +22,7 @@ export class Stomper extends Trait{
         if(us.vel.y > them.vel.y){
             this.queue(()=> this.bounce(us, them));            
             us.sounds.add('stomp');
-            this.events.emit('stomp');
+            us.events.emit(Stomper.EVENT_STOMP);
         }
     }
 }

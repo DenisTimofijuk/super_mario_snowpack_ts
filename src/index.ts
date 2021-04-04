@@ -58,7 +58,11 @@ async function main(canvas: HTMLCanvasElement) {
   level.music.player.playTrack('main');
 }
 
+function startGame() {
+  canvas.removeEventListener('click', startGame);
+  main(canvas);
+}
 const canvas = document.getElementById('screen') as HTMLCanvasElement;
-main(canvas);
+canvas.addEventListener('click', startGame);
 
 //  window.addEventListener('keyup', event => console.log(event))

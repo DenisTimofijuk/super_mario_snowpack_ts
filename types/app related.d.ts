@@ -1,8 +1,3 @@
-// type GridElement = {
-//   name?: SpriteSheetName;
-//   type?: TyleType | undefined;
-// };
-
 type GridElement = BackgroundTile | BackgroundPattern | PatternBackground;
 
 type GetByIndexResult = {

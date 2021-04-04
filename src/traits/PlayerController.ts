@@ -2,6 +2,7 @@ import { Vec2 } from "../math";
 import Entity, { Trait } from "../Entity";
 import type Level from "../level";
 import type { GameContext } from "../index";
+import { Stomper } from "./Stomper";
 
 export class PlayerController extends Trait{
     player: Entity;
@@ -14,15 +15,15 @@ export class PlayerController extends Trait{
         this.checkpoint = new Vec2(0, 0);
         this.time = 300;
         this.score = 0;
+        
+        this.listen(Stomper.EVENT_STOMP, () => {
+            this.score += 100;
+        })
+        
     }
 
     setPlayer(entity:Entity){
         this.player = entity;
-        if(this.player.stomper){
-            this.player.stomper.events.listen('stomp', () => {
-                this.score += 100;
-            })
-        }
     }
 
     collides(){}
