@@ -5,6 +5,7 @@ import type { Matrix } from './math';
 import TileResolver from './TileResolver';
 import { brick } from './tiles/brick';
 import { ground } from './tiles/ground';
+import { coin } from './tiles/coin';
 
 type Handlers = {
   [K in TyleType]: Function[];
@@ -14,6 +15,7 @@ const handlers: Handlers = {
   ground,
   sky: [],
   brick,
+  coin
 };
 
 export default class TileCollider {

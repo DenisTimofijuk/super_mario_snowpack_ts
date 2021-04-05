@@ -22,7 +22,7 @@ async function main(canvas: HTMLCanvasElement) {
   const [entityFactory, font] = await Promise.all([loadEntities(audioContext), loadFont()]);
 
   const loadLevel = createLevelLoader(entityFactory);
-  const level = await loadLevel('1-1');
+  const level = await loadLevel('debug-coin');
 
   const camera = new Camera();
 

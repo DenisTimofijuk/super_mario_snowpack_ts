@@ -31,12 +31,12 @@ export const Sides = {
 export class Trait {
   static EVENT_TASK = Symbol('task');
 
-  listeners: Array<{name:Symbol, callback:()=>void, count:number}>;
+  listeners: Array<{name:Symbol, callback:Function, count:number}>;
   constructor(public readonly NAME: TraitName) {
     this.listeners = [];
   }
 
-  listen(name:Symbol, callback:()=>void, count = Infinity){
+  listen(name:Symbol, callback:Function, count = Infinity){
     const listener = {name, callback, count};
     this.listeners.push(listener);
   }
@@ -45,7 +45,7 @@ export class Trait {
   update(a:GameContext, b: Entity, c: Level){};
   collides(a: Entity, b:Entity){};
 
-  queue(task:()=>void){
+  queue(task:Function){
     this.listen(Trait.EVENT_TASK, task, 1);
   }
 
@@ -137,7 +137,7 @@ export default class Entity {
   turbo(a: KeyState) {}
 
   finalize(){
-    this.events.emit(Trait.EVENT_TASK);
+    this.events.emit(Trait.EVENT_TASK, this);
     this.traits.forEach(trait => trait.finalize(this));
     this.events.clear();
   }
