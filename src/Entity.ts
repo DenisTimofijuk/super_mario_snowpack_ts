@@ -20,6 +20,7 @@ import type { Gravity } from './traits/Gravity';
 import type { Emitter } from './traits/Emitter';
 import type { Player } from './traits/player';
 import EventBuffer from './EventBuffer';
+import type LevelTimer from './traits/LevelTimer';
 
 export const Sides = {
   TOP: Symbol('top'),
@@ -56,8 +57,8 @@ export class Trait {
   }
 }
 
-export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics | Velocity | Gravity | Emitter | Player;
-type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour & Solid & Physics & Velocity & Gravity & Emitter & Player;
+export type TraitType = Jump | Go | PendulumMoove | GoombaBehaviour | Stomper | Killable | PlayerController | KoopaBehaviour | Solid | Physics | Velocity | Gravity | Emitter | Player | LevelTimer;
+type TraitTypeTSworkaround = Jump & Go & PendulumMoove & GoombaBehaviour & Stomper & Killable & PlayerController & KoopaBehaviour & Solid & Physics & Velocity & Gravity & Emitter & Player & LevelTimer;
 export default class Entity {
   pos: Vec2;
   vel: Vec2;
@@ -82,6 +83,7 @@ export default class Entity {
   sounds: Set<AudioName>;
   player?: Player;
   events: EventBuffer;
+  leveltimer?: LevelTimer;
   constructor() {
     this.audio = <any>{};
     this.pos = new Vec2(0, 0);

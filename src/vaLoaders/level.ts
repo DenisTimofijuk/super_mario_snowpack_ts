@@ -7,6 +7,23 @@ import { createBackgroundLayer } from '../app_layers/background';
 import { createSpriteLayer } from '../app_layers/sprites';
 import { loadMusicSheet } from './music';
 import { loadSpriteSheet } from './sprite';
+import Entity from '../Entity';
+import LevelTimer from '../traits/LevelTimer';
+
+function createTimer() {
+  const timer = new Entity();
+  timer.addTrait( new LevelTimer() );
+  
+  return timer;
+}
+
+function setupBehaviour(level:Level) {
+  const timer = createTimer();
+  level.entities.add(timer);
+
+  level.events.listen(LevelTimer.EVENT_TIMER_OK, () => level.music.playTheme());
+  level.events.listen(LevelTimer.EVENT_TIMER_HURRY, () => level.music.playHurryTheme());
+}
 
 function setupBackground(
   levelSpec: Level_JSON,
@@ -62,6 +79,7 @@ export function createLevelLoader(entityFactory: EntityFactorie) {
         level.music.setPlayer(musicPlayer);
         setupBackground(levelSpec, level, backgroundsprites);
         setupEntities(levelSpec, level, entityFactory);
+        setupBehaviour(level);
 
         return level;
       });

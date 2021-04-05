@@ -4,9 +4,6 @@ import { setupKeyboard } from './input';
 import Timer from './Timer';
 import { EntityFactorie, loadEntities } from './entities';
 import { createLevelLoader } from './vaLoaders/level';
-import Entity from './Entity';
-import { PlayerController } from './traits/PlayerController';
-import { Solid } from './traits/Solid';
 import { createCollisionLayer } from './app_layers/collision';
 import { loadFont } from './vaLoaders/font';
 import { createDashboardLayer } from './app_layers/dashboard';
@@ -30,10 +27,8 @@ async function main(canvas: HTMLCanvasElement) {
   const camera = new Camera();
 
   const mario = createPlayer(entityFactory.mario());
-
-  const playerEnv = createPlayerENviroment(mario);
-  level.entities.add(playerEnv);
-
+  mario.player && (mario.player.playerName = "MARIO");
+  
   const input = setupKeyboard(mario);
   input.listenTo(window);
 
@@ -41,12 +36,17 @@ async function main(canvas: HTMLCanvasElement) {
   const collisionLayer = createCollisionLayer(level);
   collisionLayer && level.comp.layers.push(collisionLayer);
 
-  level.comp.layers.push(createDashboardLayer(font, playerEnv));
+  const playerEnv = createPlayerENviroment(mario);
+  level.entities.add(playerEnv);
+
+  level.comp.layers.push(createDashboardLayer(font, level));
+
   const gameContext: GameContext = {
     audioContext,
     entityFactory,
     deltaTime: null,
   };
+  
   const timer = new Timer();
   timer.update = function update(deltaTime: number) {
     gameContext.deltaTime = deltaTime;
@@ -55,7 +55,6 @@ async function main(canvas: HTMLCanvasElement) {
     level.comp.draw(ctx, camera);
   };
   timer.start();
-  level.music.player.playTrack('main');
 }
 
 function startGame() {
@@ -64,5 +63,3 @@ function startGame() {
 }
 const canvas = document.getElementById('screen') as HTMLCanvasElement;
 canvas.addEventListener('click', startGame);
-
-//  window.addEventListener('keyup', event => console.log(event))

@@ -12,4 +12,4 @@ type GetByIndexResult = {
 
 type EventEmitterName = 'stomp' | 'jump';
 
-type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller' | 'solid' | 'physics' | 'velocity' | 'gravity' | 'emitter' | 'player';
+type TraitName = 'jump' | 'go' | 'pendulummoove' | 'behavior' | 'stomper' | 'killable' | 'playercontroller' | 'solid' | 'physics' | 'velocity' | 'gravity' | 'emitter' | 'player' | 'leveltimer';
