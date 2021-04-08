@@ -13,7 +13,7 @@ interface MarioSoundsJSON {
     fx: SoundEffects;
 }
 
-type MusicJSONfileName = 'overworld' | 'hurry';
+type MusicJSONfileName = 'overworld' | 'hurry' | 'underworld';
 type MusicTracContent = {
     url:string;
 }

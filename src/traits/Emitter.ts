@@ -5,7 +5,7 @@ import type Level from '../level';
 export class Emitter extends Trait {
   interval: number;
   coolDown: number;
-  emitters: Array<(a:Entity, b?:Level)=>void>;
+  emitters: Array<(a:GameContext, b:Entity, c?:Level)=>void>;
   constructor() {
     super('emitter');
     this.interval = 2;
@@ -16,14 +16,14 @@ export class Emitter extends Trait {
   update(gameContext: GameContext, entity: Entity, level?: Level) {
       this.coolDown -= gameContext.deltaTime!;
       if(this.coolDown <= 0){
-        this.emit(entity, level);
+        this.emit(gameContext, entity, level);
         this.coolDown = this.interval;
       }
   }
 
-  emit(entity:Entity, level?:Level){
+  emit(gameContext: GameContext, entity:Entity, level?:Level){
     for(const emitter of this.emitters){
-        emitter(entity, level);
+        emitter(gameContext, entity, level);
     }
   }
 }

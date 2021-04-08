@@ -21,6 +21,6 @@ export function loadEntities(audioContext: AudioContext) {
     loadGoomba(audioContext).then(addAs('goomba')), 
     loadKoopa(audioContext).then(addAs('koopa')),
     loadBullet(audioContext).then(addAs('bullet')),
-    loadCanon(audioContext, entityFactories).then(addAs('cannon'))
+    loadCanon(audioContext).then(addAs('cannon'))
   ]).then(() => entityFactories);  
 }

@@ -1,7 +1,7 @@
 {
     "spriteSheet": "overworld",
     "musicSheet": "silent",
-
+    "patternSheet": "overworld-patterns",
     "layers": [{
             "tiles": [{
                     "name": "sky",

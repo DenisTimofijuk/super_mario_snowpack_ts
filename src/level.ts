@@ -5,6 +5,15 @@ import { EntityCollider } from './EntityCollider';
 import TileCollider from './TileCollider';
 import MusicController from './MusicController';
 import EventEmitter from './eventEmiter';
+import Camera from './Camera';
+import { findPlayers } from './player';
+
+
+function focusPlayer(level:Level) {
+  for(const player of findPlayers(level)){
+    level.camera.pos.x = Math.max(0, player.pos.x - 100);
+  }
+}
 
 export default class Level {
   comp: Compositor;
@@ -15,7 +24,10 @@ export default class Level {
   entityCollider: EntityCollider;
   music: MusicController;
   events: EventEmitter;
+  camera: Camera;
+  name: string;
   constructor() {
+    this.name = "";
     this.gravity = 1500;
     this.totalTime = 0;
     this.comp = new Compositor();
@@ -24,6 +36,11 @@ export default class Level {
     this.tileCollider = new TileCollider();
     this.music = new MusicController();
     this.events = new EventEmitter();
+    this.camera = new Camera();
+  }
+
+  draw(gameContext: GameContext){
+    this.comp.draw(gameContext.videoContext, this.camera);
   }
 
   update(gameContext: GameContext) {
@@ -40,6 +57,8 @@ export default class Level {
     })
 
     this.entities.forEach(entity => entity.finalize())
+
+    focusPlayer(this);
 
     this.totalTime += gameContext.deltaTime!;
   }

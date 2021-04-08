@@ -5,23 +5,22 @@ import { Emitter } from '../traits/Emitter';
 import type Level from '../level';
 import type { EntityFactorie } from '../entities';
 import { findPlayers } from '../player';
+import type { GameContext } from 'src';
 
 const HOLD_FIRE_THRESHOLD = 30;
 
 export function loadCanon(
-  audioContext: AudioContext,
-  entityFactories: EntityFactorie,
+  audioContext: AudioContext
 ) {
   return loadAudioBoard('bullet', audioContext).then((audio) => {
-    return createCanonFactory(audio, entityFactories);
+    return createCanonFactory(audio);
   });
 }
 
 function createCanonFactory(
-  audio: AudioBoard,
-  entityFactories: EntityFactorie,
+  audio: AudioBoard
 ) {
-  function emitBullet(cannon: Entity, level?: Level) {
+  function emitBullet(gameContext: GameContext, cannon: Entity, level?: Level) {
     let dir = 1;
     for (const player of findPlayers(level)) {
       if (
@@ -36,7 +35,7 @@ function createCanonFactory(
       }
     }
 
-    const bullet = entityFactories.bullet();
+    const bullet = gameContext.entityFactory.bullet();
     bullet.pos.copy(cannon.pos);
     bullet.vel.set(80 * dir, 0);
 

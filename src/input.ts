@@ -1,43 +1,31 @@
 import Entity, { displayMissingTrait } from './Entity';
+import InputRouter from './InputRouter';
 import KeyboardState from './keyboardState';
 
-export function setupKeyboard(mario: Entity) {
+export function setupKeyboard(window: Window) {
   const input = new KeyboardState();
+  const router = new InputRouter();
+  input.listenTo(window);
+
   input.addMapping('ArrowUp', (keystate) => {
     if (keystate) {
-      if(mario.jump){
-        mario.jump.start()
-      }else{
-        displayMissingTrait('mario jump.start', 'jump');
-      }       
+      router.route(entity => entity.jump?.start());
     } else {
-      if(mario.jump){
-        mario.jump.cancel()
-      }else{
-        displayMissingTrait('mario jum.cancel', 'jump');
-      }
+      router.route(entity => entity.jump?.cancel());
     }
   });
 
   input.addMapping('ArrowRight', (keystate) => {
-    if(mario.go){
-      mario.go.dir += keystate ? 1 : -1
-    }else{
-      displayMissingTrait('mario', 'go');
-    }
+      router.route(entity => entity.go && (entity.go.dir += keystate ? 1 : -1));
   });
 
   input.addMapping('ArrowLeft', (keystate) => {
-    if(mario.go){
-      mario.go.dir += keystate ? -1 : 1
-    }else{
-      displayMissingTrait('mario', 'go');
-    }
+      router.route(entity => entity.go && (entity.go.dir += keystate ? -1 : 1));
   });
 
   input.addMapping('ShiftLeft', (keystate) => {
-    mario.turbo(keystate)
+    router.route(entity => entity.turbo(keystate));
   });
 
-  return input;
+  return router;
 }

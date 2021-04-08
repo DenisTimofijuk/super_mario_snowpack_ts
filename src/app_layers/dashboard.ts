@@ -34,7 +34,7 @@ export function createDashboardLayer(font: Font, level: Level) {
     }
 
     font.print('WORLD', context, 152, LINE1);
-    font.print('1-1', context, 160, LINE2);
+    font.print(level.name, context, 160, LINE2);
 
     if(timerTrait){
       font.print('TIME', context, 208, LINE1);

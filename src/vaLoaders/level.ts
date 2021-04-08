@@ -17,6 +17,10 @@ function createTimer() {
   return timer;
 }
 
+function loadPattern(name:Pattern_JSON_file_name){
+  return loadJSON<OverworldPattern>(`/sprites/patterns/${name}.json`)
+}
+
 function setupBehaviour(level:Level) {
   const timer = createTimer();
   level.entities.add(timer);
@@ -29,11 +33,12 @@ function setupBackground(
   levelSpec: Level_JSON,
   level: Level,
   backgroundsprites: SpriteSheet,
+  patterns: OverworldPattern
 ) {
   levelSpec.layers.forEach((layer) => {
     const grid = createGrid(
       layer.tiles,
-      levelSpec.patterns,
+      patterns,
     );
     if (backgroundsprites) {
       const backgroundLayer = createBackgroundLayer(
@@ -65,19 +70,21 @@ function setupEntities(
 }
 
 export function createLevelLoader(entityFactory: EntityFactorie) {
-  return function loadLevel(name: Level_JSON_file_name) {
-    return loadJSON<Level_JSON>(`./levels/${name}.json`)
+  return function loadLevel<K extends Level_JSON>(name: Level_JSON_file_name) {
+    return loadJSON<K>(`./levels/${name}.json`)
       .then((levelSpec) =>
         Promise.all([
           levelSpec, 
           loadSpriteSheet(levelSpec.spriteSheet),
-          loadMusicSheet(levelSpec.musicSheet)
+          loadMusicSheet(levelSpec.musicSheet),
+          loadPattern(levelSpec.patternSheet)
         ]),
       )
-      .then(([levelSpec, backgroundsprites, musicPlayer]) => {
+      .then(([levelSpec, backgroundsprites, musicPlayer, patterns]) => {
         const level = new Level();
+        level.name = name;
         level.music.setPlayer(musicPlayer);
-        setupBackground(levelSpec, level, backgroundsprites);
+        setupBackground(levelSpec, level, backgroundsprites, patterns);
         setupEntities(levelSpec, level, entityFactory);
         setupBehaviour(level);
 
